@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Metropolitan Church, Ibadan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="TMC">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192-maskable.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+</head>
+<body>
+    <!-- Custom PWA Splash Screen -->
+    <div id="pwa-splash" class="pwa-splash" aria-hidden="true">
+        <div class="pwa-splash-container">
+            <img src="LOGO TMC.png" alt="TMC" class="pwa-splash-logo">
+            <p class="pwa-splash-text">The Metropolitan Church</p>
+            <div class="pwa-splash-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
+                <div class="brand-text">
+                    <span class="church-name">The Metropolitan Church, Ibadan</span>
+                    <span class="church-motto">Equipping The Saints, edifying the Church.</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
+                <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
+                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
+                <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
+                <li class="nav-item"><a href="ebooks.html" class="nav-link">EBOOKS</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="motto-banner" aria-label="Church motto">
+        <p>Equipping The Saints, edifying the Church.</p>
+    </section>
+
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search messages...">
+                <button id="searchBtn" class="search-btn">Search</button>
+            </div>
+        </div>
+    </section>
+    <section class="breadcrumb-bar" aria-label="Breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html" aria-label="Home">&#8962;</a>
+                <span class="breadcrumb-separator">&gt;</span>
+                <span class="breadcrumb-current">Messages</span>
+            </nav>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Messages</h2>
+            <div class="media-grid" id="mediaGrid">
+                <div class="media-card series-card" id="series-prayer-1">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685741/prayerseries1_x88suo.jpg') center center / contain no-repeat;"></div>
+                    <h3>Prayer Series 1</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('prayer-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="prayer-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1_ln5R9hcp3fxmKTGIBGlUZ4YHlCFK9qS/view?usp=drivesdk" aria-label="Listen Volume 1">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 2:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/14jOUC-WsyzCaiRXuh_Cu1I8AmUcvUIqO/view?usp=drivesdk" aria-label="Listen Volume 2">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 3:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1JLf_EuFTi75fZSuZE21DQy3p1exR0J2q/view?usp=drivesdk" aria-label="Listen Volume 3">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 4:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1PY4L3ATy1TMzjcVvdKUm0W6trZdwSwkC/view?usp=drivesdk" aria-label="Listen Volume 4">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 5:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1e4y9SYH6MPID-xuHOF54h80IqbKQChS2/view?usp=drivesdk" aria-label="Listen Volume 5">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Q and A Volume 6:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1WmA_SJhZRuvtueZZV24JtVDwbyKvd8jH/view?usp=drivesdk" aria-label="Listen Q and A Volume">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 7:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1V47D5ycqAJF2fHt9tYyfFlGirFZWPAEF/view?usp=drivesdk" aria-label="Listen Volume 7">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="media-card series-card" id="series-following-1">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685741/following_God_s_plan_for_your_life_series1_cqrtfb.jpg') center center / contain no-repeat;"></div>
+                    <h3>Following God's Plan For Your Life (Series 1)</h3>
+                    <p>By the Word and Spirit — click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('following-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="following-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 2:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/16wIOytRHofBu28DLE5klBLZmzeUc_C5e/view?usp=drive_link" aria-label="Listen Volume 2">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 3:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1Pjq3v16pihzlJ4jeCDfTMrnexDBGRZzq/view?usp=drive_link" aria-label="Listen Volume 3">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 4:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1khLyDo_QY9wEVeUFedkFk4QGBgm2sXPM/view?usp=drive_link" aria-label="Listen Volume 4">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 5:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1ikFFu6DgmgOFlQaCSn_WPSNVXHWxEe-Q/view?usp=drive_link" aria-label="Listen Volume 5">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 6:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1qiUt_PHFtPD-iLdWJdCD-Bx2Oo24_LWl/view?usp=drive_link" aria-label="Listen Volume 6">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 7:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1MsjumkehkSVuQ4YvmfmUSPrRyQXGUkJB/view?usp=drive_link" aria-label="Listen Volume 7">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 8:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1w58FEYMKQszJ_1u_vxALHfszalA-dhVq/view?usp=drive_link" aria-label="Listen Volume 8">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 9:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1ykHpwjpFVgVNzCjQl_IcywAutdDwV3Qe/view?usp=drive_link" aria-label="Listen Volume 9">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 10:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1nrKbZXVMKKDjYY-fb2sqhMyVFRJbJc7P/view?usp=drive_link" aria-label="Listen Volume 10">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 11:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/16bp1zvaUbmtRRBhP00szkKwVPynXm078/view?usp=drive_link" aria-label="Listen Volume 11">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 12:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1BBSaXaGHg53LOB-v73E1P63SPoUkzrGL/view?usp=drive_link" aria-label="Listen Volume 12">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 13:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1453s0jl9KISBwM3Bd7rzp8k_VpaHQT7_/view?usp=drive_link" aria-label="Listen Volume 13">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 14:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1361r89F8Mnd7pyLSChdgUUzKB4BnXt9u/view?usp=drive_link" aria-label="Listen Volume 14">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 15:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1y9nDa19abw5MJtfmVeM12gRUVbD5n80f/view?usp=drive_link" aria-label="Listen Volume 15">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 16:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1q3xlwg1rc5U62CEetUA4cvp4x_AQik0L/view?usp=drive_link" aria-label="Listen Volume 16">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 17:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1XGmgUw1Jkdr6ywHbuI7c4Kcpqf40Sqii/view?usp=drive_link" aria-label="Listen Volume 17">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 18:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/10JBa1rpaVVp2OwUZOlKIp8WpafA33Fhe/view?usp=drive_link" aria-label="Listen Volume 18">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 19:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1dfHAKIezKH0j_kS2WyamhCXY06EjZAbV/view?usp=drive_link" aria-label="Listen Volume 19">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 20:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1CB7mZOyiZVQqoX57EeTdhDvKA6T2qTHJ/view?usp=drive_link" aria-label="Listen Volume 20">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 21:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1kN5VsCuW1YVQ4z2w77US3bPkm3uiNxU6/view?usp=drive_link" aria-label="Listen Volume 21">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 22:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1UrJkGywjq6w3eKCxyc5FZWu3g1MuOGy8/view?usp=drive_link" aria-label="Listen Volume 22">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-gospel-1">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685741/the_gospel_pog5vz.jpg') center center / contain no-repeat;"></div>
+                    <h3>The Gospel (Series 1)</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('gospel-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="gospel-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1UxWeIpwBjAVwXnx-gvqHUqJihQQmmLwY/view?usp=drivesdk" aria-label="Listen Volume 1">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 2:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1gTKt6kBNet8c17fFZNgM2hVkKk2PheDE/view?usp=drivesdk" aria-label="Listen Volume 2">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 3:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1ftVklcGMhZOCNbw1gGgw-6-4Lh86EyOs/view?usp=drive_link" aria-label="Listen Volume 3">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 4:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1KV_Qml5HZs9CW2tCi6rL1fTiZIzD7ERC/view?usp=drivesdk" aria-label="Listen Volume 4">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-fundamentals-1">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685740/fundamentalsofministry_n0mluw.jpg') center center / contain no-repeat;"></div>
+                    <h3>Fundamentals of Ministry (Series 1)</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('fundamentals-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="fundamentals-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1Gmvwv7u9u4Bu-ERDObzFzIgmYHl_MunW/view?usp=drivesdk" aria-label="Listen Volume 1">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 2:</strong> <span>(The Gospel)</span> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1GvPl_T3HwTYUMJstJW7bNYCCsIqHyqxq/view?usp=drivesdk" aria-label="Listen Volume 2">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 3:</strong> <span>(The Church)</span> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1L521j2RFEkiqg5a_cI8PtycjHAAKCQ2C/view?usp=drivesdk" aria-label="Listen Volume 3">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 4:</strong> <span>(The Supernatural)</span> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1NT5AzIMFx78o6A0PK7sC3oWw_yEoBNoD/view?usp=drivesdk" aria-label="Listen Volume 4">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-healing-1">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685740/healingandmiracleservice_bhbbbq.jpg') center center / contain no-repeat;"></div>
+                    <h3>Healing and Miracle Service (Series 1)</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('healing-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="healing-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1JpXR31h88t8v3Mz1s7yb6JXdY91dTBpI/view?usp=drivesdk" aria-label="Listen Volume 1">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 2:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1BiitDak9Dpx7GY5UTGGnoUdf5dUdrlWi/view?usp=drivesdk" aria-label="Listen Volume 2">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 2a:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/14pR2lNm9T6oz64VA3U4T-7eFbFuMnzoK/view?usp=drivesdk" aria-label="Listen Volume 2a">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-retreat-2026">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685741/january_retreat_gzht7v.jpg') center center / contain no-repeat;"></div>
+                    <h3>2026 January Retreat</h3>
+                    <p>Click to view volumes for this retreat.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('retreat-2026')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="retreat-2026-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1 - Endure hardness in Ministry:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/11t7xa0fIPZAWH0pyt0roqJqhlfIw6-sw/view?usp=drive_link" aria-label="Listen Volume 1 Endure hardness in Ministry">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 2 - Endure Hardness in Prayer:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1dDAQB0XS_1i-xcZghlkzkllU6b-LE3w-/view?usp=drive_link" aria-label="Listen Volume 2 Endure Hardness in Prayer">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-power-summit-1">
+                    <div class="media-image power-summit-image"></div>
+                    <h3>Power Summit Series 1.0</h3>
+                    <p>Click to access the sessions for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('power-summit-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="power-summit-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Friday Session:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1VrXU-A5KYmzv259u8Ks7SWSn1tqFQEwb/view?usp=drive_link" aria-label="Listen Friday Session">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Saturday Morning Session:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1nv8UP8ajShhvygjZxUyenuok1KLpUFd_/view?usp=drive_link" aria-label="Listen Saturday Morning Session">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Saturday Evening Session:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1TqNzRhxX1zaquQ7VGtzCu59YFVX6iHCP/view?usp=drive_link" aria-label="Listen Saturday Evening Session">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Sunday Morning Session:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/107eTLHmqJ3-i4pGYctDg2zfhv_qpAdNR/view?usp=drive_link" aria-label="Listen Sunday Morning Session">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="message-how-to-receive">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685740/how_to_receive_in_a_meeting_ppito4.jpg') center center / contain no-repeat;"></div>
+                    <h3>How to Receive in a Meeting</h3>
+                    <p>Click to open this message.</p>
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1KB2T94hJ0s2kZT6NCW7LXEljaOBWj6Ar/view?usp=drivesdk" aria-label="Open How to Receive in a Meeting">Listen</button>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="message-making-your-life-count">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685741/Making_Your_Life_count_y4k0eb.jpg') center center / contain no-repeat;"></div>
+                    <h3>Making Your Life Count</h3>
+                    <p>Beginning of January Meeting.</p>
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1HW6qeMPL4ojzNAaEVoOFbP8PI6Yprnce/view?usp=drivesdk" aria-label="Open Making Your Life Count Beginning of January Meeting">Listen</button>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-cultivating-prayer-1">
+                    <div class="media-image cultivating-prayer-image"></div>
+                    <h3>Cultivating a Life of Prayer (Series 1)</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('cultivating-prayer-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="cultivating-prayer-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 5:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1AG6aP8UYxd7eYhZ1cxoL37xO08j77A7C/view?usp=drivesdk" aria-label="Listen Cultivating Volume 5">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 6:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1BhUOOpan0soN4RTNEUSbFtLQaQqf0EGJ/view?usp=drivesdk" aria-label="Listen Cultivating Volume 6">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-leading-spirit-1">
+                    <div class="media-image leading-spirit-image"></div>
+                    <h3>The Leading of the Spirit (Series 1)</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('leading-spirit-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="leading-spirit-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 5:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/19tG0TAyjo0uv2lUFu5IMFp8eWZIP6MNs/view?usp=drivesdk" aria-label="Listen Leading of the Spirit Volume 5">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 6:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1Ba2sGqNIqvnuwfyKXpLUnOo_L9BBy41t/view?usp=drivesdk" aria-label="Listen Leading of the Spirit Volume 6">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 7:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1CJXpY7foWwIAVDRPTCXwdm8oaGgC0S3v/view?usp=drivesdk" aria-label="Listen Leading of the Spirit Volume 7">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-leading-spirit-2">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778685742/The_Leading_of_the_Spirit_y01jgt.jpg') center center / contain no-repeat;"></div>
+                    <h3>The Leading of the Spirit (Series 2)</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('leading-spirit-2')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="leading-spirit-2-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0;"><strong>Volume 1 (The Heart of Man):</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1KVCPzE8LukY4oCWI2ib-V3Sc5gqwj8qp/view?usp=drivesdk" aria-label="Listen The Heart of Man">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media-card series-card" id="series-vision-1">
+                    <div class="media-image vision-image"></div>
+                    <h3>The Vision of The Metropolitan Church</h3>
+                    <p>Click to view volumes for this series.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('vision-1')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="vision-1-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1feSxUQtHKyuT6XBqq3AeJMbv7V0lhKPf/view?usp=drivesdk" aria-label="Listen Volume 1">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 2:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1BDLmzVck0yRBFBVrkVA_l8WOxYy27o4o/view?usp=drivesdk" aria-label="Listen Volume 2">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 3:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1vPEzQPr4YpuYF7TgnCPWA7qHXU7NTWzm/view?usp=drivesdk" aria-label="Listen Volume 3">Listen</button></li>
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 4:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1Q-oJR5E4OflteTPGYlC4MfstAlRjriMR/view?usp=drivesdk" aria-label="Listen Volume 4">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 5:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1QsKRqajqRT4csPS4eEtz1c-DyoF0UsdP/view?usp=drivesdk" aria-label="Listen Volume 5">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 6:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1tMh0GX_OtCdm34LXhS5IAbHEIxjBy__g/view?usp=drive_link" aria-label="Listen Volume 6">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="media-card series-card" id="series-volunteers-meeting">
+                    <div class="media-image" style="background: #f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1779188961/Volunteers_meeting_ha1tvr.png') center center / contain no-repeat;"></div>
+                    <h3>Volunteers Meeting</h3>
+                    <p>Click to view volumes for this meeting.</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="toggleSeries('volunteers-meeting')">Open Series</button>
+                    </div>
+
+                    <div class="volume-list" id="volunteers-meeting-volumes" style="display:none; margin-top:12px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding:8px 0; border-bottom:1px solid #e6ecd8;"><strong>Volume 1:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1KdhVBnGFAJA45Er8PuC_1ZLBcFCNhfNc/view?usp=drivesdk" aria-label="Listen Volume 1">Listen</button></li>
+                            <li style="padding:8px 0;"><strong>Volume 2:</strong> <button type="button" class="btn btn-primary listen-btn" data-url="https://drive.google.com/file/d/1mOhh0UU0aPX1PvNHRS6Mb3DhI-1f9bvP/view?usp=drivesdk" aria-label="Listen Volume 2">Listen</button></li>
+                        </ul>
+                    </div>
+                </div>
+            
+            </div>
+
+            <div class="grid-actions">
+                <button type="button" id="seeMoreBtn" class="btn btn-primary" aria-expanded="false">See more</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About Us</h4>
+                    <p>The Metropolitan Church is dedicated to raising ministers who will be responsible for the furtherance of the gospel.</p>                  <p>Equipping The Saints, edifying the Church.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Messages</a></li>
+                        <li><a href="videos.html">Videos</a></li>
+                        <li><a href="songs.html">Songs</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">f</a>
+                        <a href="#" class="social-icon">𝕏</a>
+                        <a href="#" class="social-icon">📷</a>
+                        <a href="#" class="social-icon">▶</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-admin-link">
+                <a href="believer-login.html">Admin Access</a>
+            </div>
+            <div class="footer-install" style="display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; margin-top: 12px;">
+                <a href="#" id="installAppLink" class="install-link">Install App</a>
+                <button type="button" id="clearAppDataBtn" class="install-link" style="background: rgba(255,255,255,0.08);">Reset App</button>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Metropolitan Church, Ibadan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

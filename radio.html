@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Radio | The Metropolitan Church, Ibadan</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
+                <div class="brand-text">
+                    <span class="church-name">The Metropolitan Church, Ibadan</span>
+                    <span class="church-motto">Equipping The Saints, edifying the Church.</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
+                <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
+                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
+                <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
+                <li class="nav-item"><a href="ebooks.html" class="nav-link">EBOOKS</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="motto-banner" aria-label="Church motto">
+        <p>Equipping The Saints, edifying the Church.</p>
+    </section>
+
+    <section class="top-alert" role="status" aria-live="polite">
+        <div class="container">
+            <p><strong>Listening on-site saves battery and data:</strong> Playing messages directly in the app uses streamed caching and avoids launching external players.</p>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search radio recordings...">
+                <button id="searchBtn" class="search-btn">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="breadcrumb-bar" aria-label="Breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html" aria-label="Home">&#8962;</a>
+                <span class="breadcrumb-separator">&gt;</span>
+                <span class="breadcrumb-current">Radio</span>
+            </nav>
+        </div>
+    </section>
+
+    <section class="section bg-light audio-player-section">
+        <div class="container">
+            <h2 class="section-title">Radio</h2>
+            <p class="section-note">Tap a recording below to play it directly inside the site. Add your direct audio links to the cards when ready.</p>
+
+            <div class="radio-player audio-player" data-audio-player>
+                <div class="audio-player-glow" aria-hidden="true"></div>
+                <div class="audio-player-header">
+                    <div>
+                        <span class="audio-player-kicker">Now Playing</span>
+                        <h2 data-track-title>Sunday Service Recording</h2>
+                        <p data-track-description>Direct on-site playback with buffering, smooth seeking, and a clean fallback state.</p>
+                    </div>
+                    <div class="audio-player-live" aria-label="Ready for playback">
+                        <span class="live-dot" aria-hidden="true"></span>
+                        Radio Ready
+                    </div>
+                </div>
+
+                <div class="audio-player-body">
+                    <button
+                        type="button"
+                        class="audio-play-toggle"
+                        data-audio-toggle
+                        aria-label="Play Sunday service recording"
+                        aria-pressed="false"
+                    >
+                        <span class="audio-play-icon" data-play-icon aria-hidden="true">▶</span>
+                    </button>
+
+                    <div class="audio-player-meta">
+                        <div class="audio-player-status" data-audio-status>
+                            <span class="audio-spinner" aria-hidden="true"></span>
+                            <span data-status-text>Loading audio...</span>
+                        </div>
+
+                        <div class="audio-time-row" aria-label="Playback timing">
+                            <span data-current-time>0:00</span>
+                            <span data-duration>0:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audio-seek-wrap">
+                    <input
+                        type="range"
+                        class="audio-seek"
+                        data-audio-seek
+                        min="0"
+                        max="1000"
+                        value="0"
+                        step="1"
+                        aria-label="Seek through the recording"
+                        disabled
+                    >
+                </div>
+
+                <div class="audio-actions">
+                    <button type="button" class="audio-secondary" data-audio-retry>Retry</button>
+                    <span class="audio-note">Playback uses your direct audio URL, not a drive link.</span>
+                </div>
+
+                <audio
+                    class="audio-element"
+                    data-audio-element
+                    preload="auto"
+                    src="https://archive.org/download/recording_20260517/Recording.m4a"
+                ></audio>
+
+                <div class="audio-error" data-audio-error hidden></div>
+            </div>
+
+            <div class="media-grid" id="mediaGrid" style="margin-top: 34px;">
+                <div class="media-card">
+                    <div class="media-image" style="background:#f6faf2 url('https://res.cloudinary.com/db1aj40dk/image/upload/v1778979095/Sunday_Service_tesjcl.jpg') center center / cover no-repeat;"></div>
+                    <h3>Sunday Service Recording</h3>
+                    <p>Plays directly inside the site. Replace the source with your preferred audio link.</p>
+                    <div class="card-actions">
+                        <button
+                            type="button"
+                            class="btn btn-primary listen-btn"
+                            data-audio-src="https://archive.org/download/recording_20260517/Recording.m4a"
+                            data-audio-title="Sunday Service Recording"
+                            data-audio-description="Sunday service recording"
+                            aria-label="Play Sunday Service Recording"
+                        >
+                            Play in Site
+                        </button>
+                    </div>
+                </div>
+
+                <div class="media-card">
+                    <div class="media-image" style="background: linear-gradient(135deg, #f6faf2 0%, #ffffff 100%);"></div>
+                    <h3>Radio Recording 2</h3>
+                    <p>Paste your direct audio URL here when you send the next link.</p>
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-primary listen-btn" data-audio-src="" disabled aria-label="Add a direct audio link for recording 2">Link Coming Soon</button>
+                    </div>
+                </div>
+
+                <div class="media-card">
+                    <div class="media-image" style="background: linear-gradient(135deg, #f6faf2 0%, #ffffff 100%);"></div>
+                    <h3>Radio Recording 3</h3>
+                    <p>Use the same card format for every future radio upload.</p>
+                    <div class="card-actions">
+                        <button type="button" class="btn btn-primary listen-btn" data-audio-src="" disabled aria-label="Add a direct audio link for recording 3">Link Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-admin-link">
+                <a href="believer-login.html">Admin Access</a>
+            </div>
+            <div class="footer-install">
+                <a href="#" id="installAppLink" class="install-link">Install App</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Metropolitan Church, Ibadan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

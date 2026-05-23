@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Believer Details | The Metropolitan Church, Ibadan</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
+                <div class="brand-text">
+                    <span class="church-name">The Metropolitan Church, Ibadan</span>
+                    <span class="church-motto">Equipping The Saints, edifying the Church.</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
+                <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
+                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
+                <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
+                <li class="nav-item"><a href="ebooks.html" class="nav-link">EBOOKS</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="motto-banner" aria-label="Church motto">
+        <p>Equipping The Saints, edifying the Church.</p>
+    </section>
+
+    <section class="section bg-light">
+        <div class="container" id="believerDetailsPage">
+            <div class="auth-panel" style="max-width: 760px; margin: 0 auto;">
+                <span class="auth-kicker">Protected Records</span>
+                <h2>Admin Spreadsheet</h2>
+                <p>This page is limited to admin access. Use the spreadsheet link below to view the records.</p>
+                <div class="details-toolbar-actions" style="margin-top: 22px; flex-wrap: wrap;">
+                    <a href="https://docs.google.com/spreadsheets/d/1bCGuGFbTkvkgX9Ftc40aV59Pl0Q-dfIAztJ81ndfBuY/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Open Admin Spreadsheet</a>
+                    <button type="button" id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+                
+                <div class="contact-list" style="margin-top:22px;">
+                    <h3>Contacts</h3>
+                    <div class="contact-search" style="margin:8px 0 12px 0; display:flex; gap:8px; align-items:center;">
+                        <input id="contactsSearchInput" type="search" placeholder="Search contacts (name, hall, department, phone)" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                        <button id="contactsSearchBtn" class="btn btn-primary" type="button">Search</button>
+                        <button id="contactsClearBtn" class="btn" type="button" style="background:#f4f4f4;">Clear</button>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="contact-table" style="width:100%; border-collapse:collapse;">
+                            <thead>
+                                <tr style="background:#f4f4f4; text-align:left;">
+                                    <th style="padding:8px; border:1px solid #e0e0e0; width:6%;">S/N</th>
+                                    <th style="padding:8px; border:1px solid #e0e0e0;">NAME</th>
+                                    <th style="padding:8px; border:1px solid #e0e0e0;">HALL</th>
+                                    <th style="padding:8px; border:1px solid #e0e0e0;">DEPARTMENT</th>
+                                    <th style="padding:8px; border:1px solid #e0e0e0;">PHONE NUMBER</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">1</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother King Abiola</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Tedder A51</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">EHS</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07045538433</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">2</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Victory Nwokocha</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Queens I25</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Economics</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09064292277</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">3</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Harel West (Davi)</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Indy A51</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Mechanical engineering</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07057449947</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">4</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Samson</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B47</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Political science</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07047482999</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">5</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Testimony</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Queens</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Geology</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07030011378</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">6</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Adedayo</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Idia</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Dentistry</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07016205604</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">7</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Peter Goodluck</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B2</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Quantity Survey</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07075224378</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">8</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Oluwafadekemi</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Awo D63</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Adult Education</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+234 814 012 3763</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">9</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Olamide</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Awo D63</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Adult Education</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">0916 723 1827</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">10</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Rachael</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Awo D64</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sociology</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09079157366</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">11</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Divine Oluebube Ojinmah</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Awo D62</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Agricultural economics</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08165225125</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">12</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Teni Adetayo</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Awo D63</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Adult Education</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+234 906 505 9169</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">13</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Olaoluwa</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B47</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Agricultural Engineering</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+234 812 760 1769</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">14</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Asegun</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B47</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">MBBS</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+234 705 494 9218</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">15</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Victor</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">&nbsp;</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">food tech</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+234 704 890 7891</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">16</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Tega</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">&nbsp;</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+234 816 011 0146</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">17</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Michael</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B48</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Pet Engineering</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08144739800</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">18</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Temi Oyaromade</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Mellanby</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">MBBS 400l</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08102318021</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">19</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Ayomide Yaya</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Ojoh</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Law</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09044267892</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">20</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Demilade Adekoya</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A42</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Petroleum Engineering</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09150673737</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">21</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">King Abuh</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A45</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Electrolum Engineering</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09067350519</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">22</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Stephen Nnachiajah</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A50</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Accounting</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07025867569</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">23</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Eliam Ilesanmi</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Agobwo</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Biochemistry</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09049972727</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">24</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Joshua Amadi</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B4</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Geography</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08109662858</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">25</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bro Vincent</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Zik C65</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Biochemistry</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">+2347049606166</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">26</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Seun</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B4</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Architecture</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07082981427</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">27</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Divine Adeleye</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B8</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Political science</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08069155406</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">28</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Miracle</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">&nbsp;</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Corper</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07034950696</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">29</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Paul Abodunrin</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A45</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Business Education</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09033861076</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">30</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Shola Alao</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A40</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Architecture</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08147491723</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">31</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Favour Adeleke</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A28</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Microbiology</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09020255198</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">32</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Emmanuel Akinola</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B8</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Economics</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08125006749</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">33</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Timothy</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A45</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Computer Science</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09021947088</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">33</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Ugochukwu Ezenwa</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B12</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Accounting</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08127959426</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">34</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Chigozie Okorafo</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Mellanby A35</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Law</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09030021004</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">35</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sister Eniola</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Awo D64</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Sociology</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07019161798</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">36</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Emmanuel Abimbola</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B31</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Science and technology education</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">08081639558</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">37</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Olatunde Ogunlana</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Kuti B62</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Biochemistry</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">07035110484</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">38</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Brother Samuel Lawal</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Bello A47</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">Computer Science</td>
+                                    <td style="padding:8px; border:1px solid #e0e0e0;">09061537601</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-admin-link">
+                <a href="believer-login.html">Admin Access</a>
+            </div>
+            <div class="footer-install">
+                <a href="#" id="installAppLink" class="install-link">Install App</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Metropolitan Church, Ibadan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
