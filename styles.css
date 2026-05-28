@@ -523,6 +523,36 @@ body {
     gap: 30px;
 }
 
+.articles-section {
+    margin-top: 26px;
+}
+
+.articles-grid .article-card .media-image {
+    background-size: cover;
+}
+
+.articles-grid .article-card h3 {
+    color: var(--text-primary);
+}
+
+.articles-grid .article-card p {
+    color: var(--text-secondary);
+}
+
+.card-link {
+    display: block;
+    padding: 10px 20px 20px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.card-link:hover {
+    color: var(--primary-dark);
+}
+
 @media (max-width: 768px) {
     .media-grid {
         display: flex;
