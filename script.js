@@ -53,14 +53,13 @@ window.addEventListener('load', () => {
     const splash = document.getElementById('pwa-splash');
     if (!splash) return;
     
-    // Keep splash visible for 6 seconds
     setTimeout(() => {
         splash.classList.add('hidden');
         // Remove from DOM after animation completes
         setTimeout(() => {
             if (splash.parentNode) splash.parentNode.removeChild(splash);
         }, 400);
-    }, 6000); // Changed duration to 6 seconds
+    }, 5000);
 });
 
 if (navToggle && navMenu) {
@@ -109,7 +108,31 @@ if (photoModal) {
     const photoModalDownload = document.getElementById('photoModalDownload');
     const photoCloseTargets = photoModal.querySelectorAll('[data-photo-close]');
     const photoCards = document.querySelectorAll('body > section .media-card a[href]');
+    const photoFilterButtons = Array.from(document.querySelectorAll('[data-photo-filter]'));
+    let activePhotoFilter = 'all';
     let lastFocusedElement = null;
+
+    function applyPhotoFilter() {
+        document.querySelectorAll('.photo-card').forEach(card => {
+            const category = card.dataset.category || 'all';
+            const isVisible = activePhotoFilter === 'all' || category === activePhotoFilter;
+            card.hidden = !isVisible;
+        });
+    }
+
+    photoFilterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            activePhotoFilter = button.dataset.photoFilter || 'all';
+            photoFilterButtons.forEach(item => {
+                const isActive = item === button;
+                item.classList.toggle('is-active', isActive);
+                item.setAttribute('aria-pressed', String(isActive));
+            });
+            applyPhotoFilter();
+        });
+    });
+
+    applyPhotoFilter();
 
     const openPhotoModal = (imageUrl, imageAlt, titleText, captionText) => {
         if (!photoModal || !photoModalImage || !photoModalDownload) {
@@ -633,113 +656,116 @@ document.querySelectorAll('.media-card, .video-card, .ebook-card, .song-item').f
 // ============================================
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
+const clearSearchBtn = document.getElementById('clearSearchBtn');
+const searchResultCount = document.getElementById('searchResultCount');
+const messagesEmptyState = document.getElementById('messagesEmptyState');
+const filterChips = Array.from(document.querySelectorAll('.filter-chip'));
+const messageGrid = document.getElementById('mediaGrid');
 
-if (searchInput && searchBtn) {
-    const performSearch = () => {
-        const query = searchInput.value.toLowerCase().trim();
-        
-        // Get all searchable items on the page
-        const mediaCards = document.querySelectorAll('.media-card');
-        const videoCards = document.querySelectorAll('.video-card');
-        const songItems = document.querySelectorAll('.song-item');
-        const ebookCards = document.querySelectorAll('.ebook-card');
-        const radioPlayer = document.querySelector('.radio-player');
-        const linksContent = document.querySelector('.links-content');
-        
-        let hasResults = false;
-        
-        // Search in media cards (Messages page)
-        mediaCards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            const matches = query === '' || text.includes(query);
-            card.style.display = matches ? 'block' : 'none';
-            if (matches) hasResults = true;
-        });
-        
-        // Search in video cards
-        videoCards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            const matches = query === '' || text.includes(query);
-            card.style.display = matches ? 'block' : 'none';
-            if (matches) hasResults = true;
-        });
-        
-        // Search in song items
-        songItems.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            const matches = query === '' || text.includes(query);
-            item.style.display = matches ? 'block' : 'none';
-            if (matches) hasResults = true;
-        });
-        
-        // Search in ebook cards
-        ebookCards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            const matches = query === '' || text.includes(query);
-            card.style.display = matches ? 'block' : 'none';
-            if (matches) hasResults = true;
-        });
-        
-        // For radio and links pages
-        if (radioPlayer) {
-            const text = radioPlayer.textContent.toLowerCase();
-            const matches = query === '' || text.includes(query);
-            radioPlayer.style.display = matches ? 'block' : 'none';
-            if (matches) hasResults = true;
-        }
-        
-        if (linksContent) {
-            const text = linksContent.textContent.toLowerCase();
-            const matches = query === '' || text.includes(query);
-            linksContent.style.display = matches ? 'block' : 'none';
-            if (matches) hasResults = true;
-        }
-        
-        // Show/hide no results message
-        let noResultsMsg = document.querySelector('.no-results');
-        if (query !== '' && !hasResults) {
-            if (!noResultsMsg) {
-                noResultsMsg = document.createElement('div');
-                noResultsMsg.className = 'no-results';
-                noResultsMsg.textContent = 'No results found for "' + query + '"';
-                const section = document.querySelector('.section');
-                if (section) {
-                    section.insertAdjacentElement('afterbegin', noResultsMsg);
-                }
-            }
-            noResultsMsg.style.display = 'block';
-        } else if (noResultsMsg) {
-            noResultsMsg.style.display = 'none';
-        }
-    };
-    
-    // Search on button click
-    searchBtn.addEventListener('click', performSearch);
-    
-    // Search on Enter key
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            performSearch();
+let activeFilter = 'all';
+let searchTimer = null;
+
+function getMessageCards() {
+    return Array.from(document.querySelectorAll('#mediaGrid .media-card'));
+}
+
+function getCardCategories(card) {
+    return (card.dataset.category || 'all').toLowerCase().split(/\s+/);
+}
+
+function updateMessageSearchUI(visibleCount, totalCount, query) {
+    const filterLabel = activeFilter === 'all' ? 'all categories' : activeFilter;
+    const queryLabel = query ? ` matching "${query}"` : '';
+
+    if (searchResultCount) {
+        searchResultCount.textContent = `Showing ${visibleCount} of ${totalCount} messages in ${filterLabel}${queryLabel}`;
+    }
+
+    if (messagesEmptyState) {
+        messagesEmptyState.hidden = visibleCount !== 0;
+    }
+}
+
+function applyMessageFilters() {
+    const query = (searchInput?.value || '').toLowerCase().trim();
+    const cards = getMessageCards();
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const categories = getCardCategories(card);
+        const matchesFilter = activeFilter === 'all' || categories.includes(activeFilter);
+        const matchesSearch = !query || card.textContent.toLowerCase().includes(query);
+        const isVisible = matchesFilter && matchesSearch;
+
+        card.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+    });
+
+    updateMessageSearchUI(visibleCount, cards.length, query);
+}
+
+function scheduleMessageSearch() {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(applyMessageFilters, 180);
+}
+
+function setActiveFilter(filter) {
+    activeFilter = filter;
+    filterChips.forEach(chip => {
+        const isActive = chip.dataset.filter === filter;
+        chip.classList.toggle('is-active', isActive);
+        chip.setAttribute('aria-pressed', String(isActive));
+    });
+    applyMessageFilters();
+}
+
+if (searchInput && searchBtn && messageGrid) {
+    searchBtn.addEventListener('click', applyMessageFilters);
+
+    clearSearchBtn?.addEventListener('click', () => {
+        searchInput.value = '';
+        applyMessageFilters();
+        searchInput.focus();
+    });
+
+    searchInput.addEventListener('input', scheduleMessageSearch);
+    searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            applyMessageFilters();
         }
     });
-    
-    // Real-time search as user types
-    searchInput.addEventListener('input', performSearch);
+}
+
+filterChips.forEach(chip => {
+    chip.addEventListener('click', () => setActiveFilter(chip.dataset.filter || 'all'));
+});
+
+if (messageGrid) {
+    applyMessageFilters();
 }
 
 console.log('Church website loaded successfully!');
 
-// Toggle a series' volume list (called from inline buttons)
+// Toggle a series' volume list
 function toggleSeries(seriesId) {
     const list = document.getElementById(seriesId + '-volumes');
+    const button = document.querySelector(`[data-series-toggle="${seriesId}"]`);
     if (!list) return;
-    if (list.style.display === 'none' || list.style.display === '') {
-        list.style.display = 'block';
+
+    const willOpen = !list.classList.contains('is-open');
+    list.hidden = !willOpen;
+    list.classList.toggle('is-open', willOpen);
+    button?.setAttribute('aria-expanded', String(willOpen));
+
+    if (willOpen) {
         list.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-        list.style.display = 'none';
     }
 }
+
+document.querySelectorAll('[data-series-toggle]').forEach(button => {
+    button.addEventListener('click', () => toggleSeries(button.dataset.seriesToggle));
+});
 
 // Open Listen buttons (uses data-url attribute) without causing page text-selection/highlight
 document.addEventListener('click', (e) => {

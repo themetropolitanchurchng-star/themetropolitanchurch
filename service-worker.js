@@ -1,7 +1,8 @@
-const CACHE_NAME = 'tmc-cache-v6';
+const CACHE_NAME = 'tmc-cache-v7';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
+  '/quotes.html',
   '/styles.css',
   '/script.js',
   '/LOGO TMC.png',

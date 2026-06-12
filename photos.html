@@ -19,6 +19,7 @@
             <ul class="nav-menu" id="navMenu">
                 <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
                 <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
+                <li class="nav-item"><a href="quotes.html" class="nav-link">QUOTES</a></li>
                 <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
                 <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
                 <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
@@ -39,38 +40,57 @@
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Photos</h2>
-            <p class="section-note">Gallery updated with the latest church service photos.</p>
-            <div class="media-grid">
-                <div class="media-card">
+            <div class="gallery-toolbar">
+                <div>
+                    <h2 class="section-title">Photos</h2>
+                    <p class="section-note">Gallery updated with the latest church service photos.</p>
+                </div>
+                <div class="filter-chips" aria-label="Filter photos">
+                    <button type="button" class="filter-chip is-active" data-photo-filter="all">All</button>
+                    <button type="button" class="filter-chip" data-photo-filter="service">Service</button>
+                    <button type="button" class="filter-chip" data-photo-filter="prayer">Prayer</button>
+                    <button type="button" class="filter-chip" data-photo-filter="study">Study</button>
+                </div>
+            </div>
+
+            <div class="media-grid gallery-grid" id="photoGallery">
+                <div class="media-card photo-card" data-category="service">
                     <a href="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119340/Church_Service_Church_uoit1s.jpg" target="_blank" rel="noopener noreferrer" aria-label="Preview church service photo">
-                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119340/Church_Service_Church_uoit1s.jpg" alt="Church service photo" class="media-image" style="width:100%; height:180px; object-fit:cover; display:block; border-radius:12px;">
+                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119340/Church_Service_Church_uoit1s.jpg" alt="Church service photo" class="media-image" loading="lazy">
+                        <span class="photo-overlay"><span>Church Service</span><small>Service</small></span>
                     </a>
                     <h3>Church Service</h3>
+                    <div class="photo-tags"><span>Worship</span><span>Gathering</span></div>
                     <p>Photo from the church service gathering.</p>
                 </div>
 
-                <div class="media-card">
+                <div class="media-card photo-card" data-category="service">
                     <a href="https://res.cloudinary.com/db1aj40dk/image/upload/v1778979095/Sunday_Service_tesjcl.jpg" target="_blank" rel="noopener noreferrer" aria-label="Preview Sunday service photo">
-                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1778979095/Sunday_Service_tesjcl.jpg" alt="Sunday service photo" class="media-image" style="width:100%; height:180px; object-fit:cover; display:block; border-radius:12px;">
+                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1778979095/Sunday_Service_tesjcl.jpg" alt="Sunday service photo" class="media-image" loading="lazy">
+                        <span class="photo-overlay"><span>Sunday Service</span><small>Service</small></span>
                     </a>
                     <h3>Sunday Service</h3>
+                    <div class="photo-tags"><span>Sunday</span><span>Worship</span></div>
                     <p>Another church service photo from the gallery.</p>
                 </div>
 
-                <div class="media-card">
+                <div class="media-card photo-card" data-category="prayer">
                     <a href="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119341/Prayer_Vigil_Church_fk6cux.jpg" target="_blank" rel="noopener noreferrer" aria-label="Preview prayer vigil photo">
-                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119341/Prayer_Vigil_Church_fk6cux.jpg" alt="Prayer vigil photo" class="media-image" style="width:100%; height:180px; object-fit:cover; display:block; border-radius:12px;">
+                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119341/Prayer_Vigil_Church_fk6cux.jpg" alt="Prayer vigil photo" class="media-image" loading="lazy">
+                        <span class="photo-overlay"><span>Prayer Vigil</span><small>Prayer</small></span>
                     </a>
                     <h3>Prayer Vigil</h3>
+                    <div class="photo-tags"><span>Prayer</span><span>Night Watch</span></div>
                     <p>Photo from the prayer vigil service.</p>
                 </div>
 
-                <div class="media-card">
+                <div class="media-card photo-card" data-category="study">
                     <a href="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119340/Bible_Study_Church_yv7qb4.jpg" target="_blank" rel="noopener noreferrer" aria-label="Preview bible study photo">
-                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119340/Bible_Study_Church_yv7qb4.jpg" alt="Bible study photo" class="media-image" style="width:100%; height:180px; object-fit:cover; display:block; border-radius:12px;">
+                        <img src="https://res.cloudinary.com/db1aj40dk/image/upload/v1779119340/Bible_Study_Church_yv7qb4.jpg" alt="Bible study photo" class="media-image" loading="lazy">
+                        <span class="photo-overlay"><span>Bible Study</span><small>Study</small></span>
                     </a>
                     <h3>Bible Study</h3>
+                    <div class="photo-tags"><span>Study</span><span>Fellowship</span></div>
                     <p>Photo from the Bible study meeting.</p>
                 </div>
             </div>
