@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Login | The Metropolitan Church, Ibadan</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
+                <div class="brand-text">
+                    <span class="church-name">The Metropolitan Church, Ibadan</span>
+                    <span class="church-motto">Equipping The Saints, edifying the Church.</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
+                <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
+                <li class="nav-item"><a href="quotes.html" class="nav-link">QUOTES</a></li>
+                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
+                <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
+                <li class="nav-item"><a href="ebooks.html" class="nav-link">EBOOKS</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="motto-banner" aria-label="Church motto">
+        <p>Equipping The Saints, edifying the Church.</p>
+    </section>
+
+    <section class="section bg-light">
+        <div class="container auth-layout">
+            <div class="auth-panel">
+                <span class="auth-kicker">Protected Access</span>
+                <h2>Believer Records</h2>
+                <p>Only the admin can access the believer details page.</p>
+                <ul>
+                    <li>Login is required before records can be viewed or added.</li>
+                    <li>Fields include name, contact, email address, level, school name, address in school, and address at home.</li>
+                    <li>The details page stores records locally in this browser session.</li>
+                </ul>
+            </div>
+
+            <div class="auth-panel">
+                <h2>Admin Login</h2>
+                <p>Use the admin credentials to continue. After sign-in, you will be taken to the protected believer records page where the admin spreadsheet is available.</p>
+                <form id="adminLoginForm" class="auth-form" autocomplete="off">
+                    <label for="adminUsername">
+                        Username
+                        <input type="text" id="adminUsername" required>
+                    </label>
+                    <label for="adminPassword">
+                        Password
+                        <input type="password" id="adminPassword" required>
+                    </label>
+                    <p id="loginError" class="login-error" aria-live="polite"></p>
+                    <div class="auth-form-actions">
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                        <a href="index.html" class="btn btn-secondary">Back to Messages</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-admin-link">
+                <a href="believer-details.html">Open protected believer records</a>
+            </div>
+            <div class="footer-install">
+                <a href="#" id="installAppLink" class="install-link">Install App</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Metropolitan Church, Ibadan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
