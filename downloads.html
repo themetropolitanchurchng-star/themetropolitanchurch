@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Downloads | The Metropolitan Church, Ibadan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="TMC">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192-maskable.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+</head>
+<body>
+    <div id="pwa-splash" class="pwa-splash" aria-hidden="true">
+        <div class="pwa-splash-container">
+            <img src="LOGO TMC.png" alt="TMC" class="pwa-splash-logo">
+            <p class="pwa-splash-text">The Metropolitan Church</p>
+            <div class="pwa-splash-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
+                <div class="brand-text">
+                    <span class="church-name">The Metropolitan Church, Ibadan</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
+                <li class="nav-item"><a href="downloads.html" class="nav-link is-active">DOWNLOADS</a></li>
+                <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
+                <li class="nav-item"><a href="quotes.html" class="nav-link">QUOTES</a></li>
+                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
+                <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
+                <li class="nav-item"><a href="ebooks.html" class="nav-link">EBOOKS</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="motto-banner" aria-label="Church motto">
+        <p>Equipping The Saints, edifying the Church.</p>
+    </section>
+
+    <section class="messages-hero">
+        <div class="container">
+            <div class="messages-hero-content">
+                <span class="hero-kicker">Offline Library</span>
+                <h1>Downloads</h1>
+                <p>Listen to your saved messages anywhere, even without internet.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section" aria-label="Search downloads">
+        <div class="container">
+            <div class="search-panel">
+                <div class="search-box">
+                    <label class="sr-only" for="downloadSearchInput">Search downloads</label>
+                    <input type="text" id="downloadSearchInput" class="search-input" placeholder="Search downloaded messages..." autocomplete="off">
+                    <button id="downloadClearSearchBtn" class="search-clear" type="button" aria-label="Clear search">Clear</button>
+                    <button id="downloadSearchBtn" class="search-btn">Search</button>
+                </div>
+                <div class="search-meta" aria-live="polite">
+                    <span id="downloadResultCount">Showing all downloads</span>
+                </div>
+                <div class="offline-storage-panel" aria-live="polite">
+                    <div class="offline-storage-copy">
+                        <strong>Offline storage</strong>
+                        <span id="offlineStorageSummary">Checking saved audio...</span>
+                    </div>
+                    <div class="offline-storage-meter" aria-hidden="true"><span id="offlineStorageFill"></span></div>
+                    <span id="offlineCacheStatus" class="offline-cache-status">Recently played messages are saved automatically.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="breadcrumb-bar" aria-label="Breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html" aria-label="Home">&#8962;</a>
+                <span class="breadcrumb-separator">&gt;</span>
+                <span class="breadcrumb-current">Downloads</span>
+            </nav>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Downloads</h2>
+            <div class="media-grid" id="downloadGrid">
+                <div id="downloadsLoadingState" class="loading-state" hidden>
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <p>Loading downloads...</p>
+                </div>
+                <div id="downloadsEmptyState" class="empty-state" hidden>
+                    <div class="empty-state-icon" aria-hidden="true">&#8699;</div>
+                    <h3>No downloads yet</h3>
+                    <p>Go to Messages, tap Download on any message, and it will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="audioPlayerBar" class="audio-player-bar" hidden>
+        <div class="audio-player-container">
+            <div class="audio-player-info">
+                <strong id="audioPlayerTitle">Now Playing</strong>
+                <span id="audioPlayerStatus">Loading...</span>
+            </div>
+            <audio id="pageAudio" controls preload="none"></audio>
+            <button type="button" id="audioPlayerExpand" class="audio-player-expand" aria-label="Expand audio player" aria-expanded="false" title="Expand player">[ ]</button>
+            <button type="button" id="audioPlayerClose" class="audio-player-close" aria-label="Close player">×</button>
+        </div>
+        <div class="audio-player-fullscreen" aria-hidden="true">
+            <div class="audio-fullscreen-inner">
+                <div class="audio-fullscreen-topbar">
+                    <button type="button" id="audioPlayerCollapse" class="audio-fullscreen-icon" aria-label="Minimize audio player" title="Minimize player">⌄</button>
+                    <span>Now Playing</span>
+                    <button type="button" id="audioPlayerFullscreenClose" class="audio-fullscreen-icon" aria-label="Close audio player" title="Close player">×</button>
+                </div>
+                <div class="audio-artwork" aria-hidden="true"><img src="LOGO TMC.png" alt=""></div>
+                <div class="audio-fullscreen-heading">
+                    <div><strong id="audioFullscreenTitle">Now Playing</strong><span>The Metropolitan Church</span></div>
+                    <button type="button" class="audio-fullscreen-icon audio-favorite" aria-label="Save track" title="Save track">♡</button>
+                </div>
+                <input id="audioFullscreenSeek" class="audio-fullscreen-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek through audio">
+                <div class="audio-fullscreen-times"><span id="audioFullscreenCurrent">0:00</span><span id="audioFullscreenDuration">0:00</span></div>
+                <div class="audio-fullscreen-controls">
+                    <button type="button" class="audio-fullscreen-icon" data-audio-skip="-15" aria-label="Skip back 15 seconds" title="Skip back 15 seconds">↶</button>
+                    <button type="button" id="audioFullscreenPlay" class="audio-fullscreen-play" aria-label="Play audio" aria-pressed="false">▶</button>
+                    <button type="button" class="audio-fullscreen-icon" data-audio-skip="15" aria-label="Skip forward 15 seconds" title="Skip forward 15 seconds">↷</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About Us</h4>
+                    <p>The Metropolitan Church is dedicated to raising ministers who will be responsible for the furtherance of the gospel.</p>
+                    <p>Equipping The Saints, edifying the Church.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Messages</a></li>
+                        <li><a href="downloads.html">Downloads</a></li>
+                        <li><a href="videos.html">Videos</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">f</a>
+                        <a href="#" class="social-icon">𝕏</a>
+                        <a href="#" class="social-icon">📷</a>
+                        <a href="#" class="social-icon">▶</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-admin-link">
+                <a href="believer-login.html">Admin Access</a>
+            </div>
+            <div class="footer-install" style="display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; margin-top: 12px;">
+                <a href="#" id="installAppLink" class="install-link">Install App</a>
+                <button type="button" id="clearAppDataBtn" class="install-link" style="background: rgba(255,255,255,0.08);">Reset App</button>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Metropolitan Church, Ibadan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
