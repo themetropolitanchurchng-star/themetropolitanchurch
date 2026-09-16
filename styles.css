@@ -466,31 +466,18 @@ body {
     border: 0;
 }
 
- .messages-hero {
-      position: relative;
-      overflow: hidden;
-      background-color: #f6faf2;
-      background-image:
-          linear-gradient(rgba(246, 250, 242, 0.78), rgba(246, 250, 242, 0.72)),
-          url('TMC%20FAMILY.png');
-      background-size: contain, contain;
-      background-position: center center, center center;
-      background-repeat: no-repeat, no-repeat;
-      color: #0d3822;
-      padding: 36px 0;
-      min-height: 220px;
-  }
-
-  .messages-hero::after {
-      content: none;
-  }
+.messages-hero {
+    background: var(--page-bg-alt);
+    color: var(--text-primary);
+    padding: 28px 0;
+}
 
   .messages-hero-content {
       position: relative;
       z-index: 1;
-      max-width: 560px;
+      max-width: 680px;
       margin: 0 auto;
-      text-align: center;
+      text-align: left;
   }
 
   .hero-kicker {
@@ -509,21 +496,75 @@ body {
   }
 
   .messages-hero h1 {
-      margin: 10px 0 8px;
+      margin: 0 0 6px;
       font-family: 'Source Serif 4', Georgia, serif;
       font-size: clamp(28px, 5vw, 40px);
       line-height: 1.05;
       letter-spacing: -0.02em;
-      color: #0d3822;
+    color: var(--text-primary);
   }
 
   .messages-hero p {
-      margin: 0 auto;
+      margin: 0;
       max-width: 480px;
-      font-size: clamp(13px, 1.8vw, 15px);
+      font-size: 14px;
       line-height: 1.5;
-      color: #143b24;
+      color: var(--text-secondary);
   }
+
+.loading-state {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-column: 1 / -1;
+    gap: 14px;
+    width: 100%;
+}
+
+.loading-state[hidden] {
+    display: none;
+}
+
+.skeleton-card {
+    min-height: 260px;
+    padding-bottom: 18px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    border-radius: 16px;
+    background: var(--card-bg);
+}
+
+.skeleton-image,
+.skeleton-line {
+    display: block;
+    background: linear-gradient(90deg, rgba(171, 180, 0, 0.08) 25%, rgba(171, 180, 0, 0.18) 50%, rgba(171, 180, 0, 0.08) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-image {
+    height: 150px;
+    margin-bottom: 18px;
+}
+
+.skeleton-line {
+    height: 12px;
+    margin: 0 18px 10px;
+    border-radius: 999px;
+}
+
+.skeleton-title {
+    width: 62%;
+    height: 16px;
+}
+
+.skeleton-short {
+    width: 42%;
+}
+
+@keyframes skeleton-shimmer {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
 
   .generic-hero {
       position: relative;
@@ -2356,6 +2397,15 @@ body.photo-modal-open {
 }
 
 @media (max-width: 768px) {
+    .messages-hero {
+        padding: 24px 0;
+        min-height: 0;
+    }
+
+    .loading-state {
+        grid-template-columns: 1fr;
+    }
+
     #seeMoreBtn {
         display: inline-flex;
     }
@@ -3219,11 +3269,6 @@ body.photo-modal-open {
 }
 
 @media (max-width: 400px) {
-    .messages-hero {
-        padding: 36px 0;
-        min-height: 220px;
-    }
-
     .messages-hero h1 {
         font-size: 28px;
     }
@@ -3397,24 +3442,70 @@ body.photo-modal-open {
     background: radial-gradient(circle at 50% 20%, rgba(137,106,182,0.9), transparent 38%), linear-gradient(160deg, #5d4c88 0%, #2a1d52 58%, #211842 100%);
 }
 .audio-player-bar.is-expanded .audio-player-fullscreen { display: block; }
-.audio-fullscreen-inner { width: 100%; min-height: 100vh; min-height: 100dvh; margin: 0; padding: max(18px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); display: flex; flex-direction: column; justify-content: center; }
+.audio-fullscreen-inner { width: 100%; min-height: 100vh; min-height: 100dvh; margin: 0; padding: max(18px, env(safe-area-inset-top)) 0 max(28px, env(safe-area-inset-bottom)) 0; display: flex; flex-direction: column; justify-content: flex-start; }
 .audio-fullscreen-topbar, .audio-fullscreen-heading, .audio-fullscreen-times, .audio-fullscreen-controls { display: flex; align-items: center; justify-content: space-between; }
-.audio-fullscreen-topbar { margin-bottom: 28px; font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
+.audio-fullscreen-topbar { width: 100%; margin-bottom: 28px; font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
 .audio-fullscreen-icon { width: 38px; height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 0; background: transparent; color: rgba(255,255,255,0.88); cursor: pointer; font-size: 24px; }
 .audio-artwork { width: min(82vw, 360px); margin: 0 auto 34px; display: grid; place-items: center; background: transparent; }
 .audio-artwork img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: contain; }
-.audio-fullscreen-heading { gap: 16px; margin-bottom: 26px; }
+.audio-fullscreen-heading { gap: 16px; margin: 0 max(24px, env(safe-area-inset-right)) 26px max(24px, env(safe-area-inset-left)); }
 .audio-fullscreen-heading > div { min-width: 0; }
 .audio-fullscreen-heading strong, .audio-fullscreen-heading span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .audio-fullscreen-heading strong { font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(24px, 7vw, 32px); line-height: 1.15; }
 .audio-fullscreen-heading span { margin-top: 5px; color: rgba(255,255,255,0.65); font-size: 12px; }
-.audio-fullscreen-seek { width: 100%; height: 4px; appearance: none; border-radius: 999px; background: rgba(255,255,255,0.25); accent-color: #e65ec5; }
+.audio-fullscreen-seek { width: calc(100% - max(24px, env(safe-area-inset-left)) - max(24px, env(safe-area-inset-right))); height: 4px; margin: 0 max(24px, env(safe-area-inset-right)) 0 max(24px, env(safe-area-inset-left)); appearance: none; border-radius: 999px; background: rgba(255,255,255,0.25); accent-color: #e65ec5; }
 .audio-fullscreen-seek::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(230,94,197,0.3); }
-.audio-fullscreen-times { margin-top: 9px; color: rgba(255,255,255,0.62); font-size: 11px; }
-.audio-fullscreen-controls { justify-content: center; gap: 34px; margin-top: 28px; }
+.audio-fullscreen-times { margin: 9px max(24px, env(safe-area-inset-right)) 0 max(24px, env(safe-area-inset-left)); color: rgba(255,255,255,0.62); font-size: 11px; }
+.audio-fullscreen-controls { width: 100%; justify-content: space-between; gap: 0; margin-top: auto; padding-top: 28px; }
 .audio-fullscreen-play { width: 58px; height: 58px; padding-left: 4px; border: 0; border-radius: 50%; background: #d64ec0; color: #fff; cursor: pointer; font-size: 20px; box-shadow: 0 8px 22px rgba(18,5,31,0.35); }
 .audio-favorite { flex: 0 0 auto; }
+.audio-favorite.is-loved {
+    color: #ff9edc;
+    text-shadow: 0 0 18px rgba(255, 158, 220, 0.72);
+    transform: scale(1.08);
+}
 body.audio-player-open { overflow: hidden; }
+
+.loved-messages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.loved-message-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--surface-border);
+    border-radius: 16px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-soft);
+}
+
+.loved-message-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(214, 78, 192, 0.14);
+    color: #d64ec0;
+    font-size: 22px;
+}
+
+.loved-message-copy { min-width: 0; }
+.loved-message-copy h3 { margin: 0 0 5px; color: var(--text-primary); font-size: 16px; line-height: 1.35; }
+.loved-message-copy p { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.loved-message-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.loved-message-actions .btn { font-size: 13px; }
+.loved-remove-btn { background: transparent; color: var(--text-secondary); border: 1px solid var(--surface-border); }
+.loved-remove-btn:hover { color: #b33a3a; border-color: rgba(179, 58, 58, 0.35); }
+
+@media (max-width: 520px) {
+    .loved-messages-grid { grid-template-columns: 1fr; }
+    .loved-message-card { padding: 16px; }
+}
 
 @media (max-width: 768px) {
     .audio-player-container {

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Loved Messages | The Metropolitan Church, Ibadan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-logo" href="index.html" aria-label="The Metropolitan Church home">
+                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
+                <span class="church-name">The Metropolitan Church, Ibadan</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
+                <li class="nav-item"><a href="downloads.html" class="nav-link">DOWNLOADS</a></li>
+                <li class="nav-item"><a href="loved-messages.html" class="nav-link is-active">LOVED</a></li>
+                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle" aria-label="Open navigation">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="motto-banner" aria-label="Church motto"><p>Equipping The Saints, edifying the Church.</p></section>
+
+    <section class="messages-hero">
+        <div class="container">
+            <div class="messages-hero-content">
+                <span class="hero-kicker">Your listening room</span>
+                <h1>Loved Messages</h1>
+                <p>Keep the teachings that matter most close at hand.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section" aria-label="Search loved messages">
+        <div class="container">
+            <div class="search-panel">
+                <div class="search-box">
+                    <label class="sr-only" for="lovedSearchInput">Search loved messages</label>
+                    <input type="search" id="lovedSearchInput" class="search-input" placeholder="Search your loved messages..." autocomplete="off">
+                </div>
+                <div class="search-meta"><span>Saved on this device</span></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="section">
+        <div class="container">
+            <div class="section-header-row">
+                <div>
+                    <span class="hero-kicker">Personal collection</span>
+                    <h2 class="section-title">Ready when you are</h2>
+                </div>
+            </div>
+            <div id="lovedMessagesGrid" class="loved-messages-grid"></div>
+            <div id="lovedMessagesEmptyState" class="empty-state">
+                <div class="empty-state-icon" aria-hidden="true">♥</div>
+                <h3>Your loved messages will appear here</h3>
+                <p>Open a message, expand the player, and tap the heart to save it.</p>
+                <a class="btn btn-primary" href="index.html">Explore messages</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="audioPlayerBar" class="audio-player-bar" hidden>
+        <div class="audio-player-container">
+            <div class="audio-player-info"><strong id="audioPlayerTitle">Now Playing</strong><span id="audioPlayerStatus">Loading...</span></div>
+            <audio id="pageAudio" controls preload="none"></audio>
+            <button type="button" id="audioPlayerExpand" class="audio-player-expand" aria-label="Expand player" aria-expanded="false">[ ]</button>
+            <button type="button" id="audioPlayerClose" class="audio-player-close" aria-label="Close player">×</button>
+        </div>
+        <div class="audio-player-fullscreen" aria-hidden="true">
+            <div class="audio-fullscreen-inner">
+                <div class="audio-fullscreen-topbar"><button type="button" id="audioPlayerCollapse" class="audio-fullscreen-icon" aria-label="Minimize player">⌄</button><span>Now Playing</span><button type="button" id="audioPlayerFullscreenClose" class="audio-fullscreen-icon" aria-label="Close player">×</button></div>
+                <div class="audio-artwork" aria-hidden="true"><img src="LOGO TMC.png" alt=""></div>
+                <div class="audio-fullscreen-heading"><div><strong id="audioFullscreenTitle">Now Playing</strong><span>The Metropolitan Church</span></div><button type="button" class="audio-fullscreen-icon audio-favorite" aria-label="Love this message" aria-pressed="false" title="Love this message">♡</button></div>
+                <input id="audioFullscreenSeek" class="audio-fullscreen-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek through audio">
+                <div class="audio-fullscreen-times"><span id="audioFullscreenCurrent">0:00</span><span id="audioFullscreenDuration">0:00</span></div>
+                <div class="audio-fullscreen-controls"><button type="button" class="audio-fullscreen-icon" data-audio-skip="-10" aria-label="Skip back 10 seconds">↶</button><button type="button" id="audioFullscreenPlay" class="audio-fullscreen-play" aria-label="Play audio">▶</button><button type="button" class="audio-fullscreen-icon" data-audio-skip="10" aria-label="Skip forward 10 seconds">↷</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

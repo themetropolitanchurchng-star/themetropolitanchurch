@@ -1383,7 +1383,9 @@ document.addEventListener('click', async (e) => {
 // ============================================
 let activeAudioSource = '';
 let activeAudioTitle = '';
+let activeAudioDescription = '';
 let lastResumeSaveAt = 0;
+const lovedMessagesStorageKey = 'tmcLovedMessages';
 
 const pageAudio = document.getElementById('pageAudio');
 const audioPlayerBar = document.getElementById('audioPlayerBar');
@@ -1399,6 +1401,87 @@ const audioFullscreenPlay = document.getElementById('audioFullscreenPlay');
 const audioFullscreenSeek = document.getElementById('audioFullscreenSeek');
 const audioFullscreenCurrent = document.getElementById('audioFullscreenCurrent');
 const audioFullscreenDuration = document.getElementById('audioFullscreenDuration');
+const audioFavorite = document.querySelector('.audio-favorite');
+
+function getLovedMessages() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(lovedMessagesStorageKey) || '[]');
+        return Array.isArray(stored) ? stored : [];
+    } catch (error) {
+        console.warn('Loved messages could not be loaded.', error);
+        return [];
+    }
+}
+
+function saveLovedMessages(messages) {
+    localStorage.setItem(lovedMessagesStorageKey, JSON.stringify(messages));
+}
+
+function isMessageLoved(source = activeAudioSource) {
+    return Boolean(source) && getLovedMessages().some(message => message.url === source);
+}
+
+function syncFavoriteButton() {
+    if (!audioFavorite) return;
+    const loved = isMessageLoved();
+    audioFavorite.textContent = loved ? '♥' : '♡';
+    audioFavorite.classList.toggle('is-loved', loved);
+    audioFavorite.setAttribute('aria-pressed', String(loved));
+    audioFavorite.setAttribute('aria-label', loved ? 'Remove from loved messages' : 'Love this message');
+    audioFavorite.title = loved ? 'Remove from loved messages' : 'Love this message';
+}
+
+function syncMediaSession() {
+    if (!('mediaSession' in navigator) || !activeAudioSource) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: activeAudioTitle || 'Untitled message',
+        artist: 'The Metropolitan Church',
+        album: 'Loved and saved teachings'
+    });
+}
+
+function registerMediaSessionAction(action, handler) {
+    if (!('mediaSession' in navigator)) return;
+    try {
+        navigator.mediaSession.setActionHandler(action, handler);
+    } catch (error) {
+        // Some browsers expose Media Session without supporting every action.
+    }
+}
+
+if ('mediaSession' in navigator) {
+    registerMediaSessionAction('seekbackward', () => {
+        if (!pageAudio) return;
+        pageAudio.currentTime = Math.max(0, pageAudio.currentTime - 10);
+        syncFullscreenAudio();
+    });
+    registerMediaSessionAction('seekforward', () => {
+        if (!pageAudio) return;
+        pageAudio.currentTime = Math.min(pageAudio.duration || Infinity, pageAudio.currentTime + 10);
+        syncFullscreenAudio();
+    });
+    registerMediaSessionAction('play', () => pageAudio?.play());
+    registerMediaSessionAction('pause', () => pageAudio?.pause());
+}
+
+function toggleLovedMessage() {
+    if (!activeAudioSource) return;
+    const messages = getLovedMessages();
+    const existingIndex = messages.findIndex(message => message.url === activeAudioSource);
+    if (existingIndex >= 0) {
+        messages.splice(existingIndex, 1);
+    } else {
+        messages.unshift({
+            url: activeAudioSource,
+            title: activeAudioTitle || 'Untitled message',
+            description: activeAudioDescription,
+            savedAt: new Date().toISOString()
+        });
+    }
+    saveLovedMessages(messages);
+    syncFavoriteButton();
+    renderLovedMessages();
+}
 
 const formatPlayerTime = (seconds) => {
     if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
@@ -1437,12 +1520,15 @@ function playInPageAudio(source, title, resumeTime = 0) {
     const playerLabel = title || 'Untitled message';
     activeAudioSource = source;
     activeAudioTitle = playerLabel;
+    activeAudioDescription = '';
     cacheRecentAudio(source, playerLabel);
     pageAudio.hidden = false;
     if (audioPlayerBar) audioPlayerBar.hidden = false;
     if (audioPlayerTitle) audioPlayerTitle.textContent = playerLabel;
     if (audioFullscreenTitle) audioFullscreenTitle.textContent = playerLabel;
     if (audioPlayerStatus) audioPlayerStatus.textContent = 'Loading offline audio...';
+    syncFavoriteButton();
+    syncMediaSession();
 
     const applyResumePosition = () => {
         const position = Number(resumeTime);
@@ -1493,9 +1579,11 @@ function playInPageAudio(source, title, resumeTime = 0) {
 if (pageAudio) {
     pageAudio.addEventListener('playing', () => {
         if (audioPlayerStatus) audioPlayerStatus.textContent = 'Now playing.';
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
     });
     pageAudio.addEventListener('pause', () => {
         if (audioPlayerStatus) audioPlayerStatus.textContent = 'Paused.';
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
     });
     pageAudio.addEventListener('ended', () => {
         if (audioPlayerStatus) audioPlayerStatus.textContent = 'Finished.';
@@ -1519,12 +1607,19 @@ if (pageAudio) {
     ['playing', 'pause', 'ended', 'loadedmetadata', 'durationchange'].forEach(eventName => pageAudio.addEventListener(eventName, syncFullscreenAudio));
 }
 
+if (audioFavorite) audioFavorite.addEventListener('click', toggleLovedMessage);
+
 if (audioPlayerExpand) audioPlayerExpand.addEventListener('click', () => setAudioPlayerExpanded(true));
 if (audioPlayerCollapse) audioPlayerCollapse.addEventListener('click', () => setAudioPlayerExpanded(false));
 if (audioPlayerFullscreenClose) audioPlayerFullscreenClose.addEventListener('click', () => audioPlayerClose?.click());
 if (audioFullscreenPlay && pageAudio) {
     audioFullscreenPlay.addEventListener('click', () => pageAudio.paused ? pageAudio.play().catch(() => {}) : pageAudio.pause());
 }
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && audioPlayerBar?.classList.contains('is-expanded')) {
+        setAudioPlayerExpanded(false);
+    }
+});
 if (audioFullscreenSeek && pageAudio) {
     audioFullscreenSeek.addEventListener('input', () => { pageAudio.currentTime = Number(audioFullscreenSeek.value); syncFullscreenAudio(); });
 }
@@ -1562,6 +1657,8 @@ document.addEventListener('click', (e) => {
         const title = btn.getAttribute('data-audio-title') || nearbyTitle || 'Untitled message';
         const description = btn.getAttribute('data-audio-description') || '';
         playInPageAudio(audioSrc, title, Number(btn.getAttribute('data-audio-resume-time') || 0));
+        activeAudioDescription = description;
+        syncFavoriteButton();
         btn.blur();
         return;
     }
@@ -1581,6 +1678,39 @@ document.addEventListener('click', (e) => {
     playInPageAudio(url, '');
     btn.blur();
 });
+
+function renderLovedMessages() {
+    const grid = document.getElementById('lovedMessagesGrid');
+    if (!grid) return;
+    const emptyState = document.getElementById('lovedMessagesEmptyState');
+    const query = (document.getElementById('lovedSearchInput')?.value || '').trim().toLowerCase();
+    const messages = getLovedMessages().filter(message => `${message.title} ${message.description}`.toLowerCase().includes(query));
+    grid.innerHTML = '';
+    messages.forEach(message => {
+        const card = document.createElement('article');
+        card.className = 'loved-message-card';
+        card.innerHTML = `<div class="loved-message-icon" aria-hidden="true">♥</div><div class="loved-message-copy"><h3></h3><p></p></div><div class="loved-message-actions"><button type="button" class="btn btn-primary listen-btn" data-audio-src="" data-audio-title="">Listen</button><button type="button" class="btn loved-remove-btn" data-loved-remove="">Remove</button></div>`;
+        card.querySelector('h3').textContent = message.title;
+        card.querySelector('p').textContent = message.description || 'Loved message';
+        card.querySelector('[data-audio-src]').setAttribute('data-audio-src', message.url);
+        card.querySelector('[data-audio-src]').setAttribute('data-audio-title', message.title);
+        card.querySelector('[data-loved-remove]').setAttribute('data-loved-remove', message.url);
+        grid.appendChild(card);
+    });
+    if (emptyState) emptyState.hidden = messages.length > 0;
+}
+
+document.addEventListener('click', event => {
+    const removeButton = event.target.closest('[data-loved-remove]');
+    if (!removeButton) return;
+    const messages = getLovedMessages().filter(message => message.url !== removeButton.dataset.lovedRemove);
+    saveLovedMessages(messages);
+    renderLovedMessages();
+    syncFavoriteButton();
+});
+
+document.getElementById('lovedSearchInput')?.addEventListener('input', renderLovedMessages);
+renderLovedMessages();
 
 // ============================================
 // Contacts Table Search
