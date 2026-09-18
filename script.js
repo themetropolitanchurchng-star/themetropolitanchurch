@@ -37,9 +37,19 @@ function injectThemeToggle() {
     const toggleButton = document.createElement('button');
     toggleButton.type = 'button';
     toggleButton.id = 'themeToggle';
-    toggleButton.className = 'theme-toggle theme-toggle-fab';
+    toggleButton.className = 'theme-toggle';
     toggleButton.addEventListener('click', toggleTheme);
-    document.body.appendChild(toggleButton);
+
+    const themeToggleItem = document.createElement('li');
+    themeToggleItem.className = 'nav-item theme-toggle-item';
+    themeToggleItem.appendChild(toggleButton);
+
+    if (navMenu) {
+        navMenu.appendChild(themeToggleItem);
+    } else {
+        document.body.appendChild(toggleButton);
+    }
+
     applyTheme(document.body.dataset.theme || getPreferredTheme());
 }
 
@@ -659,6 +669,7 @@ const searchBtn = document.getElementById('searchBtn');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
 const searchResultCount = document.getElementById('searchResultCount');
 const messagesEmptyState = document.getElementById('messagesEmptyState');
+const messageSearchResults = document.getElementById('messageSearchResults');
 const filterChips = Array.from(document.querySelectorAll('.filter-chip'));
 const messageGrid = document.getElementById('mediaGrid');
 const messageSortSelect = document.getElementById('messageSortSelect');
@@ -672,6 +683,61 @@ function getMessageCards() {
 
 function getCardCategories(card) {
     return (card.dataset.category || 'all').toLowerCase().split(/\s+/);
+}
+
+function hideMessageSuggestions() {
+    if (!messageSearchResults) return;
+    messageSearchResults.hidden = true;
+    messageSearchResults.replaceChildren();
+}
+
+function updateMessageSuggestions() {
+    if (!messageSearchResults || !searchInput) return;
+
+    const query = searchInput.value.trim().toLowerCase();
+    if (!query) {
+        hideMessageSuggestions();
+        return;
+    }
+
+    const matches = getMessageCards()
+        .map((card) => {
+            const title = card.querySelector('h3')?.textContent.trim() || 'Untitled message';
+            const searchableText = card.textContent.toLowerCase();
+            const titleText = title.toLowerCase();
+            const score = titleText.startsWith(query) ? 0 : titleText.includes(query) ? 1 : 2;
+            return { card, title, searchableText, score };
+        })
+        .filter((result) => result.searchableText.includes(query))
+        .sort((a, b) => a.score - b.score || a.title.localeCompare(b.title))
+        .slice(0, 8);
+
+    messageSearchResults.replaceChildren();
+    matches.forEach(({ card, title }) => {
+        const result = document.createElement('button');
+        result.type = 'button';
+        result.className = 'message-search-result';
+        result.setAttribute('role', 'option');
+        result.dataset.messageTarget = card.id;
+        result.innerHTML = `<strong></strong><span>Open message card</span>`;
+        result.querySelector('strong').textContent = title;
+        messageSearchResults.appendChild(result);
+    });
+
+    messageSearchResults.hidden = matches.length === 0;
+}
+
+function openMessageSearchResult(cardId) {
+    const card = cardId ? document.getElementById(cardId) : null;
+    if (!card) return;
+
+    searchInput.value = card.querySelector('h3')?.textContent.trim() || searchInput.value;
+    applyMessageFilters();
+    hideMessageSuggestions();
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.remove('search-result-focus');
+    window.requestAnimationFrame(() => card.classList.add('search-result-focus'));
+    window.setTimeout(() => card.classList.remove('search-result-focus'), 1400);
 }
 
 function sortMessageCards(mode = messageSortSelect?.value || 'featured') {
@@ -729,6 +795,7 @@ function applyMessageFilters() {
 
 function scheduleMessageSearch() {
     window.clearTimeout(searchTimer);
+    updateMessageSuggestions();
     searchTimer = window.setTimeout(applyMessageFilters, 180);
 }
 
@@ -742,12 +809,13 @@ function setActiveFilter(filter) {
     applyMessageFilters();
 }
 
-if (searchInput && searchBtn && messageGrid) {
-    searchBtn.addEventListener('click', applyMessageFilters);
+if (searchInput && messageGrid) {
+    searchBtn?.addEventListener('click', applyMessageFilters);
 
     clearSearchBtn?.addEventListener('click', () => {
         searchInput.value = '';
         applyMessageFilters();
+        hideMessageSuggestions();
         searchInput.focus();
     });
 
@@ -756,7 +824,19 @@ if (searchInput && searchBtn && messageGrid) {
         if (event.key === 'Enter') {
             event.preventDefault();
             applyMessageFilters();
+            hideMessageSuggestions();
+        } else if (event.key === 'Escape') {
+            hideMessageSuggestions();
         }
+    });
+
+    messageSearchResults?.addEventListener('click', (event) => {
+        const result = event.target.closest('[data-message-target]');
+        if (result) openMessageSearchResult(result.dataset.messageTarget);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.search-panel')) hideMessageSuggestions();
     });
 }
 
@@ -1905,99 +1985,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Admin Login / Believer Details
 // ============================================
 const adminAuthKey = 'tmcBelieversAdminAuth';
-const believerRecordsKey = 'tmcBelieverRecords';
 const adminUsername = 'adminTMC';
 const adminPassword = 'TMC2026!@';
 
-// Canonical believer list used by the admin directory and Save Contact links.
-const officialBelieverRecords = [
-    { name: 'Brother King Abiola', date: '', department: 'EHS', hall: 'Tedder A51', phone: '07045538433' },
-    { name: 'Sister Victory Nwokocha', date: '', department: 'Economics', hall: 'Queens I25', phone: '09064292277' },
-    { name: 'Brother Harel West (Davi)', date: '', department: 'Mechanical Engineering', hall: 'Indy A51', phone: '07057449947' },
-    { name: 'Brother Samson', date: '', department: 'Political Science', hall: 'Kuti B47', phone: '07047482999' },
-    { name: 'Sister Testimony', date: '', department: 'Geology', hall: 'Queens', phone: '07030011378' },
-    { name: 'Sister Adedayo', date: '', department: 'Dentistry', hall: 'India', phone: '07016205604' },
-    { name: 'Brother Peter Goodluck', date: '', department: 'Quantity Survey', hall: 'Kuti B2', phone: '07075224378' },
-    { name: 'Sister Oluwafadekemi', date: '', department: 'Adult Education', hall: 'Awo D63', phone: '+234 814 012 3763' },
-    { name: 'Sister Olamide', date: '', department: 'Adult Education', hall: 'Awo D63', phone: '0916 723 1827' },
-    { name: 'Sister Rachael', date: '', department: 'Sociology', hall: 'Awo D64', phone: '09079157366' },
-    { name: 'Sister Divine Oluebube Ojinmah', date: '', department: 'Agricultural Economics', hall: 'Awo D62', phone: '08165225125' },
-    { name: 'Sister Teni Adetayo', date: '', department: 'Adult Education', hall: 'Awo D63', phone: '+234 906 505 9169' },
-    { name: 'Brother Olaoluwa', date: '', department: 'Agricultural Engineering', hall: 'Kuti B47', phone: '+234 812 760 1769' },
-    { name: 'Brother Asegun', date: '', department: 'MBBS', hall: 'Kuti B47', phone: '+234 705 494 9218' },
-    { name: 'Brother Victor', date: '', department: 'Food Tech', hall: '', phone: '+234 704 890 7891' },
-    { name: 'Brother Tega', date: '', department: '', hall: 'Kuti', phone: '+234 816 011 0146' },
-    { name: 'Brother Michael', date: '', department: 'Pet Engineering', hall: 'Kuti B48', phone: '08144739800' },
-    { name: 'Brother Temi Oyaromade', date: '', department: 'MBBS (400L)', hall: 'Mellanby', phone: '08102318021' },
-    { name: 'Ayomide Yaya', date: '', department: 'Law', hall: 'Ojoh', phone: '09044267892' },
-    { name: 'Demilade Adekoya', date: '', department: 'Petroleum Engineering', hall: 'Bello A42', phone: '09150673737' },
-    { name: 'King Abuh', date: '', department: 'Electrolum Engineering', hall: 'Bello A45', phone: '09067350519' },
-    { name: 'Stephen Nnachiajah', date: '', department: 'Accounting', hall: 'Bello A50', phone: '07025867569' },
-    { name: 'Eliam Ilesanmi', date: '', department: 'Biochemistry', hall: 'Agbwo', phone: '09049972727' },
-    { name: 'Joshua Amadi', date: '', department: 'Geography', hall: 'Kuti B4', phone: '08109662858' },
-    { name: 'Bro Vincent', date: '', department: 'Biochemistry', hall: 'Zik C65', phone: '+2347049606166' },
-    { name: 'Brother Seun', date: '22/03/2026', department: 'Architecture', hall: 'Kuti B4', phone: '07082981427' },
-    { name: 'Brother Divine Adeleye', date: '22/03/2026', department: 'Political Science', hall: 'Kuti B8', phone: '08069155406' },
-    { name: 'Sister Miracle', date: '22/03/2026', department: 'Corper (Occupation)', hall: '', phone: '07034950696' },
-    { name: 'Brother Paul Abodunrin', date: '25/03/2026', department: 'Business Education', hall: 'Bello A45', phone: '09033861076' },
-    { name: 'Brother Shola Alao', date: '25/03/2026', department: 'Architecture', hall: 'Bello A40', phone: '08147491723' },
-    { name: 'Brother Favour Adeleke', date: '25/03/2026', department: 'Microbiology', hall: 'Bello A28', phone: '09020255198' },
-    { name: 'Brother Emmanuel Akinola', date: '26/03/2026', department: 'Economics', hall: 'Kuti B8', phone: '08125006749' },
-    { name: 'Brother Timothy', date: '26/03/2026', department: 'Computer Science', hall: 'Bello A45', phone: '09021947088' },
-    { name: 'Ugochukwu Ezenwa', date: '29/03/2026', department: 'Accounting', hall: 'Kuti B12', phone: '08127959426' },
-    { name: 'Chigozie Okorafo', date: '29/03/2026', department: 'Law', hall: 'Mellanby A35', phone: '09030021004' },
-    { name: 'Sister Eniola', date: '29/03/2026', department: 'Sociology', hall: 'Awo D64', phone: '0701 916 1798' },
-    { name: 'Ebrubaroghene Precious', date: '29/03/2026', department: '', hall: 'Kuti', phone: '0816 858 3164' },
-    { name: 'Brother Emmanuel Abimbola', date: '06/05/2026', department: 'Science and Technology Education', hall: 'Kuti B31', phone: '08081639558' },
-    { name: 'Brother Olatunde Ogunlana', date: '10/05/2026', department: 'Biochemistry', hall: 'Kuti B62', phone: '07035110484' },
-    { name: 'Nathaniel', date: '15/05/2026', department: 'WPE', hall: 'Bello A15', phone: '0816 396 2359' },
-    { name: 'Enoch', date: '15/05/2026', department: 'Chemistry', hall: 'Bello A15', phone: '0811 680 8563' },
-    { name: 'Brother Samuel Lawal', date: '17/05/2026', department: 'Computer Science', hall: 'Bello A47', phone: '09061537601' },
-    { name: 'Akinboade Shalom', date: '20/05/2026', department: 'Civil Engineering', hall: 'Bello A29', phone: '08083468446' },
-    { name: 'Nwosu Godwin Emeka', date: '20/05/2026', department: 'Petroleum Engineering', hall: 'Bello A27', phone: '08136794628' },
-    { name: 'Demilade Bobola', date: '24/05/2026', department: 'Pharmacy', hall: 'Kuti B61', phone: '08105307607' },
-    { name: 'Isaac Oyebamiji', date: '03/06/2026', department: 'Microbiology', hall: 'Bello A27', phone: '08145947099' },
-    { name: 'Irewole Akinola', date: '17/06/2026', department: 'Computer Science', hall: 'Bello', phone: '08029330806' },
-    { name: 'Heritage Oladimeji', date: '15/07/2026', department: 'Accounting', hall: 'Kuti B18', phone: '07068750898' },
-    { name: 'Oludara Paul Temioluwa', date: '15/07/2026', department: 'MBBS', hall: 'Tedder A30', phone: '09046911016' },
-    { name: 'Adeyemo Precious Zoe', date: '15/07/2026', department: 'MBBS', hall: 'Kuti B20', phone: '09137777739' },
-    { name: 'Taiwo Segun', date: '15/07/2026', department: 'Physiology', hall: 'Kuti B9', phone: '09023713197' },
-    { name: 'TEC (Enoch)', date: '15/07/2026', department: 'Industrial Eng.', hall: 'Kuti', phone: '08029810748' },
-    { name: 'Gabriel Sunday', date: '22/07/2026', department: 'Computer Science', hall: 'Kuti B15', phone: '08115229586' }
-];
-
-function normalizeBelieverRecord(record = {}) {
-    const name = record.name || record.fullName || record.believerName || record.contactName || '';
-    const hall = record.hall || record.schoolAddress || record.address || record.hallNumber || '';
-    const department = record.department || record.departmentName || record.programme || record.level || '';
-    const phone = record.phone || record.contact || record.phoneNumber || record.telephone || '';
-    return {
-        ...record,
-        name,
-        date: record.date || '',
-        department,
-        hall,
-        phone,
-        contact: phone,
-        schoolAddress: hall
-    };
-}
-
 function isAdminAuthenticated() {
     return sessionStorage.getItem(adminAuthKey) === 'true';
-}
-
-function getBelieverRecords() {
-    try {
-        const storedRecords = localStorage.getItem(believerRecordsKey);
-        return storedRecords ? JSON.parse(storedRecords).map(normalizeBelieverRecord) : [];
-    } catch (error) {
-        return [];
-    }
-}
-
-function saveBelieverRecords(records) {
-    localStorage.setItem(believerRecordsKey, JSON.stringify(records.map(normalizeBelieverRecord)));
 }
 
 async function clearAppData() {
@@ -2039,76 +2031,21 @@ async function clearAppData() {
     }
 }
 
-function escapeHtml(value) {
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function escapeVCardValue(value) {
-    return String(value || '')
-        .replace(/\\/g, '\\\\')
-        .replace(/;/g, '\\;')
-        .replace(/,/g, '\\,')
-        .replace(/\r?\n/g, '\\n');
-}
-
-function generateVCardUrl(contact) {
-    const vCard = [
-        'BEGIN:VCARD',
-        'VERSION:3.0',
-        `FN:${escapeVCardValue(contact.name)}`,
-        `TEL;TYPE=CELL:${escapeVCardValue(contact.phone)}`,
-        `NOTE:Department: ${escapeVCardValue(contact.department)} | Hall: ${escapeVCardValue(contact.hall)}`,
-        'END:VCARD'
-    ].join('\r\n');
-
-    return URL.createObjectURL(new Blob([vCard], { type: 'text/vcard;charset=utf-8' }));
-}
-
-function renderBelieverRecords() {
-    const tableBody = document.getElementById('believerTableBody');
-    if (!tableBody) return;
-
-    const records = getBelieverRecords();
-
-    tableBody.innerHTML = '';
-
-    if (records.length === 0) {
-        tableBody.innerHTML = '<tr class="empty-state-row"><td colspan="7">No believer records have been added yet.</td></tr>';
-        return;
-    }
-
-    tableBody.innerHTML = records.map((record, idx) => {
-        const normalizedRecord = normalizeBelieverRecord(record);
-        const vCardUrl = generateVCardUrl({
-            name: normalizedRecord.name || normalizedRecord.phone || 'Contact',
-            phone: normalizedRecord.phone,
-            department: normalizedRecord.department,
-            hall: normalizedRecord.hall
-        });
-
-        return `
-        <tr>
-            <td style="padding:8px; border:1px solid #e0e0e0;">${idx + 1}</td>
-            <td style="padding:8px; border:1px solid #e0e0e0;">${escapeHtml(normalizedRecord.date || '—')}</td>
-            <td style="padding:8px; border:1px solid #e0e0e0;">${escapeHtml(normalizedRecord.name || '—')}</td>
-            <td style="padding:8px; border:1px solid #e0e0e0;">${escapeHtml(normalizedRecord.hall || '—')}</td>
-            <td style="padding:8px; border:1px solid #e0e0e0;">${escapeHtml(normalizedRecord.department || '—')}</td>
-            <td style="padding:8px; border:1px solid #e0e0e0;">${escapeHtml(normalizedRecord.phone || '—')}</td>
-            <td style="padding:8px; border:1px solid #e0e0e0; white-space:nowrap;">
-                <a href="${vCardUrl}" download="${escapeHtml(normalizedRecord.name || normalizedRecord.phone || 'contact')}.vcf" class="btn btn-primary save-contact-link">Save Contact</a>
-            </td>
-        </tr>`;
-    }).join('');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('adminLoginForm');
     const loginError = document.getElementById('loginError');
+    const passwordInput = document.getElementById('adminPassword');
+    const passwordToggle = document.getElementById('togglePassword');
+
+    if (passwordInput && passwordToggle) {
+        passwordToggle.addEventListener('click', () => {
+            const isVisible = passwordInput.type === 'text';
+            passwordInput.type = isVisible ? 'password' : 'text';
+            passwordToggle.textContent = isVisible ? 'Show' : 'Hide';
+            passwordToggle.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+            passwordToggle.setAttribute('aria-pressed', String(!isVisible));
+        });
+    }
 
     if (loginForm) {
         if (isAdminAuthenticated()) {
@@ -2141,59 +2078,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Replace stored records with the official provided list
-        saveBelieverRecords(officialBelieverRecords);
-
-        const detailsForm = document.getElementById('believerForm');
         const logoutButton = document.getElementById('logoutBtn');
-
-        renderBelieverRecords();
-
-        if (detailsForm) {
-            detailsForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-
-                const newRecord = {
-                    name: document.getElementById('believerName')?.value.trim(),
-                    contact: document.getElementById('believerContact')?.value.trim(),
-                    email: document.getElementById('believerEmail')?.value.trim(),
-                    department: document.getElementById('believerDepartment')?.value.trim(),
-                    level: document.getElementById('believerLevel')?.value.trim(),
-                    schoolName: document.getElementById('schoolName')?.value.trim(),
-                    schoolAddress: document.getElementById('schoolAddress')?.value.trim(),
-                    homeAddress: document.getElementById('homeAddress')?.value.trim()
-                };
-
-                if (!newRecord.name || !newRecord.contact) {
-                    return;
-                }
-
-                const records = getBelieverRecords();
-                records.unshift(newRecord);
-                saveBelieverRecords(records);
-                detailsForm.reset();
-                renderBelieverRecords();
-            });
-        }
-
-        // Migration: move department-like values from `level` into `department` when department is empty
-        (function migrateLevelToDepartment() {
-            const records = getBelieverRecords();
-            let changed = false;
-            for (let i = 0; i < records.length; i++) {
-                const r = records[i];
-                if ((!r.department || r.department === '') && r.level && r.level.trim() !== '') {
-                    // Move the level content into department and clear level
-                    r.department = r.level;
-                    r.level = '';
-                    changed = true;
-                }
-            }
-            if (changed) {
-                saveBelieverRecords(records);
-                renderBelieverRecords();
-            }
-        })();
 
         if (logoutButton) {
             logoutButton.addEventListener('click', () => {
@@ -2416,6 +2301,7 @@ function renderFetchedSermons(items) {
 
         const card = document.createElement('div');
         card.className = 'media-card series-card db-fetched-card';
+        card.id = `message-card-${seriesId.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
         card.setAttribute('data-category', 'all');
 
         if (imageUrl) {
@@ -2526,6 +2412,10 @@ function renderFetchedSermons(items) {
 
     mediaGrid.insertBefore(fragment, mediaGrid.firstChild);
     console.log(`[Supabase] Inserted ${items.length} series card(s) into #mediaGrid`);
+
+    // Apply the current search to cards loaded after the initial page setup.
+    if (typeof applyMessageFilters === 'function') applyMessageFilters();
+    updateMessageSuggestions();
 
     document.querySelectorAll('[data-series-toggle]').forEach(button => {
         button.addEventListener('click', () => toggleSeries(button.dataset.seriesToggle));

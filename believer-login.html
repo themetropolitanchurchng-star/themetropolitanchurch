@@ -6,87 +6,41 @@
     <title>Admin Login | The Metropolitan Church, Ibadan</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="church-logo-image">
-                <div class="brand-text">
-                    <span class="church-name">The Metropolitan Church, Ibadan</span>
-                </div>
-            </div>
-            <ul class="nav-menu" id="navMenu">
-                <li class="nav-item"><a href="index.html" class="nav-link">MESSAGES</a></li>
-                <li class="nav-item"><a href="downloads.html" class="nav-link">DOWNLOADS</a></li>
-                <li class="nav-item"><a href="photos.html" class="nav-link">PHOTOS</a></li>
-                <li class="nav-item"><a href="quotes.html" class="nav-link">QUOTES</a></li>
-                <li class="nav-item"><a href="radio.html" class="nav-link">RADIO</a></li>
-                <li class="nav-item"><a href="videos.html" class="nav-link">VIDEOS</a></li>
-                <li class="nav-item"><a href="songs.html" class="nav-link">SONGS</a></li>
-                <li class="nav-item"><a href="ebooks.html" class="nav-link">EBOOKS</a></li>
-                <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
-            </ul>
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+<body class="admin-login-page">
+    <main class="admin-login-shell">
+        <div class="admin-login-brand">
+            <img src="LOGO TMC.png" alt="The Metropolitan Church logo" class="admin-login-logo">
+            <span>The Metropolitan Church</span>
         </div>
-    </nav>
 
-    <section class="motto-banner" aria-label="Church motto">
-        <p>Equipping The Saints, edifying the Church.</p>
-    </section>
-
-    <section class="section bg-light">
-        <div class="container auth-layout">
-            <div class="auth-panel">
-                <span class="auth-kicker">Protected Access</span>
-                <h2>Believer Records</h2>
-                <p>Only the admin can access the believer details page.</p>
-                <ul>
-                    <li>Login is required before records can be viewed or added.</li>
-                    <li>Fields include name, contact, email address, level, school name, address in school, and address at home.</li>
-                    <li>The details page stores records locally in this browser session.</li>
-                </ul>
+        <section class="admin-login-card" aria-labelledby="adminLoginTitle">
+            <div class="admin-login-heading">
+                <span class="admin-login-status"><span aria-hidden="true"></span> Secure admin access</span>
+                <h1 id="adminLoginTitle">Welcome back</h1>
+                <p>Sign in to manage believer records.</p>
             </div>
 
-            <div class="auth-panel">
-                <h2>Admin Login</h2>
-                <p>Use the admin credentials to continue. After sign-in, you will be taken to the protected believer records page where the admin spreadsheet is available.</p>
-                <form id="adminLoginForm" class="auth-form" autocomplete="off">
-                    <label for="adminUsername">
-                        Username
-                        <input type="text" id="adminUsername" required>
-                    </label>
-                    <label for="adminPassword">
-                        Password
-                        <input type="password" id="adminPassword" required>
-                    </label>
-                    <p id="loginError" class="login-error" aria-live="polite"></p>
-                    <div class="auth-form-actions">
-                        <button type="submit" class="btn btn-primary">Sign In</button>
-                        <a href="index.html" class="btn btn-secondary">Back to Messages</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
+            <form id="adminLoginForm" class="auth-form admin-login-form" autocomplete="off">
+                <label for="adminUsername">
+                    Username
+                    <input type="text" id="adminUsername" autocomplete="username" autocapitalize="none" required>
+                </label>
+                <label for="adminPassword">
+                    Password
+                    <span class="admin-password-field">
+                        <input type="password" id="adminPassword" autocomplete="current-password" required>
+                        <button type="button" id="togglePassword" class="password-toggle" aria-label="Show password" aria-pressed="false">Show</button>
+                    </span>
+                </label>
+                <p id="loginError" class="login-error" aria-live="polite"></p>
+                <button type="submit" class="admin-login-submit">Sign in <span aria-hidden="true">&#8594;</span></button>
+            </form>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-admin-link">
-                <a href="believer-details.html">Open protected believer records</a>
-            </div>
-            <div class="footer-install">
-                <a href="#" id="installAppLink" class="install-link">Install App</a>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 The Metropolitan Church, Ibadan. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+            <a href="index.html" class="admin-login-back">&#8592; Back to messages</a>
+        </section>
+
+        <p class="admin-login-footer">Authorized administrators only</p>
+    </main>
 
     <script src="script.js"></script>
 </body>
