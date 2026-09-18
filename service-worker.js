@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tmc-cache-v10';
+const CACHE_NAME = 'tmc-cache-v11';
 const MEDIA_CACHE_NAME = 'tmc-media-v1';
 const ASSETS_TO_CACHE = [
   '/',

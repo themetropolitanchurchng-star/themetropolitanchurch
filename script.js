@@ -738,7 +738,21 @@ function openMessageSearchResult(cardId) {
     card.classList.remove('hidden');
     card.classList.remove('search-result-focus');
     window.requestAnimationFrame(() => {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const isMobileLayout = window.matchMedia('(max-width: 768px)').matches;
+
+        if (isMobileLayout && messageGrid) {
+            const cardLeft = card.offsetLeft - messageGrid.offsetLeft - 14;
+            messageGrid.scrollTo({ left: Math.max(0, cardLeft), behavior: 'smooth' });
+
+            const gridTop = messageGrid.getBoundingClientRect().top;
+            const headerHeight = document.querySelector('.navbar')?.getBoundingClientRect().height || 0;
+            if (gridTop < headerHeight) {
+                window.scrollBy({ top: gridTop - headerHeight - 12, behavior: 'smooth' });
+            }
+        } else {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
         card.classList.add('search-result-focus');
     });
     window.setTimeout(() => card.classList.remove('search-result-focus'), 1400);
