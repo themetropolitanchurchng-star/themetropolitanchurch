@@ -734,9 +734,13 @@ function openMessageSearchResult(cardId) {
     searchInput.value = card.querySelector('h3')?.textContent.trim() || searchInput.value;
     applyMessageFilters();
     hideMessageSuggestions();
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.hidden = false;
+    card.classList.remove('hidden');
     card.classList.remove('search-result-focus');
-    window.requestAnimationFrame(() => card.classList.add('search-result-focus'));
+    window.requestAnimationFrame(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('search-result-focus');
+    });
     window.setTimeout(() => card.classList.remove('search-result-focus'), 1400);
 }
 
