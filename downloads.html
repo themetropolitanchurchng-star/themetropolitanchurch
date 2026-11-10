@@ -122,32 +122,52 @@
 
     <div id="audioPlayerBar" class="audio-player-bar" hidden>
         <div class="audio-player-container">
+            <div class="audio-player-mini-art" aria-hidden="true"><img src="LOGO TMC.png" alt=""></div>
             <div class="audio-player-info">
                 <strong id="audioPlayerTitle">Now Playing</strong>
                 <span id="audioPlayerStatus">Loading...</span>
             </div>
+            <div class="audio-player-mini-progress" aria-hidden="true"><span id="audioPlayerMiniFill"></span></div>
             <audio id="pageAudio" controls preload="none"></audio>
-            <button type="button" id="audioPlayerExpand" class="audio-player-expand" aria-label="Expand audio player" aria-expanded="false" title="Expand player">[ ]</button>
-            <button type="button" id="audioPlayerClose" class="audio-player-close" aria-label="Close player">×</button>
+            <button type="button" id="audioPlayerExpand" class="audio-player-expand" aria-label="Expand audio player" aria-expanded="false" title="Expand player">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" id="audioPlayerClose" class="audio-player-close" aria-label="Close player" title="Close player">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
         </div>
         <div class="audio-player-fullscreen" aria-hidden="true">
             <div class="audio-fullscreen-inner">
                 <div class="audio-fullscreen-topbar">
-                    <button type="button" id="audioPlayerCollapse" class="audio-fullscreen-icon" aria-label="Minimize audio player" title="Minimize player">⌄</button>
+                    <button type="button" id="audioPlayerCollapse" class="audio-fullscreen-icon" aria-label="Minimize audio player" title="Minimize player">
+                        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                     <span>Now Playing</span>
-                    <button type="button" id="audioPlayerFullscreenClose" class="audio-fullscreen-icon" aria-label="Close audio player" title="Close player">×</button>
+                    <button type="button" id="audioPlayerFullscreenClose" class="audio-fullscreen-icon" aria-label="Close audio player" title="Close player">
+                        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </button>
                 </div>
-                <div class="audio-artwork" aria-hidden="true"><img src="LOGO TMC.png" alt=""></div>
+                <div class="audio-artwork" aria-hidden="true"><div class="audio-artwork-glow"></div><img src="LOGO TMC.png" alt=""></div>
                 <div class="audio-fullscreen-heading">
                     <div><strong id="audioFullscreenTitle">Now Playing</strong><span>The Metropolitan Church</span></div>
-                    <button type="button" class="audio-fullscreen-icon audio-favorite" aria-label="Love this message" aria-pressed="false" title="Love this message">♡</button>
+                    <button type="button" class="audio-fullscreen-icon audio-favorite" aria-label="Love this message" aria-pressed="false" title="Love this message">
+                        <svg class="icon-heart icon-heart--outline" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-7.5C.53 11.02 1.2 7.5 4.1 5.9A5 5 0 0 1 12 7.2a5 5 0 0 1 7.9-1.3c2.9 1.6 3.57 5.12 1.43 7.6C18.7 16.65 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                        <svg class="icon-heart icon-heart--filled" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-7.5C.53 11.02 1.2 7.5 4.1 5.9A5 5 0 0 1 12 7.2a5 5 0 0 1 7.9-1.3c2.9 1.6 3.57 5.12 1.43 7.6C18.7 16.65 12 21 12 21z" fill="currentColor"/></svg>
+                    </button>
                 </div>
                 <input id="audioFullscreenSeek" class="audio-fullscreen-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek through audio">
                 <div class="audio-fullscreen-times"><span id="audioFullscreenCurrent">0:00</span><span id="audioFullscreenDuration">0:00</span></div>
                 <div class="audio-fullscreen-controls">
-                    <button type="button" class="audio-fullscreen-icon" data-audio-skip="-10" aria-label="Skip back 10 seconds" title="Skip back 10 seconds">↶</button>
-                    <button type="button" id="audioFullscreenPlay" class="audio-fullscreen-play" aria-label="Play audio" aria-pressed="false">▶</button>
-                    <button type="button" class="audio-fullscreen-icon" data-audio-skip="10" aria-label="Skip forward 10 seconds" title="Skip forward 10 seconds">↷</button>
+                    <button type="button" class="audio-fullscreen-icon" data-audio-skip="-10" aria-label="Skip back 10 seconds" title="Skip back 10 seconds">
+                        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M11 17a5 5 0 1 0-2-9.58" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 4v4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="9" y="14.5" font-size="6" font-weight="700" fill="currentColor">10</text></svg>
+                    </button>
+                    <button type="button" id="audioFullscreenPlay" class="audio-fullscreen-play" aria-label="Play audio" aria-pressed="false">
+                        <svg class="icon-play" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                        <svg class="icon-pause" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z" fill="currentColor"/></svg>
+                    </button>
+                    <button type="button" class="audio-fullscreen-icon" data-audio-skip="10" aria-label="Skip forward 10 seconds" title="Skip forward 10 seconds">
+                        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M13 17a5 5 0 1 1 2-9.58" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 4v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="9.5" y="14.5" font-size="6" font-weight="700" fill="currentColor">10</text></svg>
+                    </button>
                 </div>
             </div>
         </div>

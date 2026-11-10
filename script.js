@@ -1708,7 +1708,6 @@ function isMessageLoved(source = activeAudioSource) {
 function syncFavoriteButton() {
     if (!audioFavorite) return;
     const loved = isMessageLoved();
-    audioFavorite.textContent = loved ? '♥' : '♡';
     audioFavorite.classList.toggle('is-loved', loved);
     audioFavorite.setAttribute('aria-pressed', String(loved));
     audioFavorite.setAttribute('aria-label', loved ? 'Remove from loved messages' : 'Love this message');
@@ -2643,4 +2642,19 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateNavState);
     document.addEventListener('DOMContentLoaded', updateNavState);
     updateNavState();
+})();
+
+// Round 5: keep fullscreen seek fill in sync (WebKit track fill via --seek-fill)
+(function () {
+    const seek = document.getElementById('audioFullscreenSeek');
+    if (!seek) return;
+    const updateSeekFill = () => {
+        const max = Number(seek.max) || 0;
+        const val = Number(seek.value) || 0;
+        const pct = max > 0 ? (val / max) * 100 : 0;
+        seek.style.setProperty('--seek-fill', pct + '%');
+    };
+    seek.addEventListener('input', updateSeekFill);
+    seek.addEventListener('change', updateSeekFill);
+    document.addEventListener('DOMContentLoaded', updateSeekFill);
 })();
