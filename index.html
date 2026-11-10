@@ -48,7 +48,8 @@
                 <li class="nav-item"><a href="loved-messages.html" class="nav-link">LOVED</a></li>
                 <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
             </ul>
-            <div class="nav-toggle" id="navToggle">
+            <div class="nav-backdrop" aria-hidden="true"></div>
+            <div class="nav-toggle" id="navToggle" role="button" aria-label="Toggle menu" aria-expanded="false" tabindex="0">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -59,8 +60,12 @@
     <section class="messages-hero">
         <div class="container">
             <div class="messages-hero-content">
+                <span class="hero-kicker">Teaching Archive</span>
                 <h1>Messages and Teaching</h1>
-                <p>Listen to teachings regularly</p>
+                <p>Listen to sermons, series, and teachings from The Metropolitan Church, Ibadan.</p>
+                <div class="hero-actions">
+                    <a href="#messages" class="btn btn-hero">Listen Now</a>
+                </div>
             </div>
         </div>
     </section>
@@ -70,6 +75,12 @@
             <div class="search-panel">
                 <div class="search-box">
                     <label class="sr-only" for="searchInput">Search messages</label>
+                    <span class="search-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </span>
                     <input type="text" id="searchInput" class="search-input" placeholder="Search messages, series, topics..." autocomplete="off">
                     <button id="clearSearchBtn" class="search-clear" type="button" aria-label="Clear search">Clear</button>
                     <button id="searchBtn" class="search-btn">Search</button>
@@ -87,7 +98,7 @@
         </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="messages">
         <div class="container">
             <h2 class="section-title">Messages</h2>
             <div class="media-grid" id="mediaGrid">

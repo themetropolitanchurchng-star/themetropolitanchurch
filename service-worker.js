@@ -1,12 +1,14 @@
-const CACHE_NAME = 'tmc-cache-v11';
+const CACHE_NAME = 'tmc-cache-v12';
 const MEDIA_CACHE_NAME = 'tmc-media-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
+  '/series.html',
   '/downloads.html',
   '/quotes.html',
   '/styles.css',
   '/script.js',
+  '/series.js',
   '/LOGO TMC.png',
   '/icon-96.png',
   '/icon-144.png',

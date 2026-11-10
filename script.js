@@ -73,22 +73,72 @@ window.addEventListener('load', () => {
 });
 
 if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        navToggle.classList.toggle('active');
-    });
-}
+    let navBackdrop = document.querySelector('.nav-backdrop');
+    if (!navBackdrop) {
+        navBackdrop = document.createElement('div');
+        navBackdrop.className = 'nav-backdrop';
+        navBackdrop.setAttribute('aria-hidden', 'true');
+        navMenu.insertAdjacentElement('afterend', navBackdrop);
+    }
 
-// Close menu when a link is clicked
-const navLinks = document.querySelectorAll('.nav-link');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        if (navMenu && navToggle) {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
+    if (!navToggle.hasAttribute('tabindex')) navToggle.setAttribute('tabindex', '0');
+    if (!navToggle.getAttribute('role')) navToggle.setAttribute('role', 'button');
+    if (!navToggle.getAttribute('aria-label')) navToggle.setAttribute('aria-label', 'Toggle menu');
+    navToggle.setAttribute('aria-expanded', 'false');
+
+    const closeNav = () => {
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
+    };
+
+    const openNav = () => {
+        navMenu.classList.add('active');
+        navToggle.classList.add('active');
+        navToggle.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('nav-open');
+    };
+
+    navToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = navMenu.classList.contains('active');
+        if (isOpen) closeNav();
+        else openNav();
+    });
+
+    navToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            navToggle.click();
         }
     });
-});
+
+    // Close menu when a link is clicked
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (navMenu.classList.contains('active')) closeNav();
+        });
+    });
+
+    // Close menu when backdrop is clicked
+    navBackdrop.addEventListener('click', closeNav);
+
+    // Close menu on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+            closeNav();
+        }
+    });
+
+    // Close on resize to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+            closeNav();
+        }
+    });
+}
 
 // ============================================
 // Dropdown Menu Toggle (Mobile)
@@ -633,6 +683,8 @@ window.addEventListener('resize', () => {
     if (window.innerWidth > 768 && navMenu && navToggle) {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
     }
 });
 
@@ -950,8 +1002,14 @@ seriesAccessForm?.addEventListener('submit', (event) => {
     const enteredPassword = accessModalPassword?.value || '';
 
     if (enteredUsername === credentials.username && enteredPassword === credentials.password) {
+        const targetId = pendingSeriesId;
         closeSeriesAccessModal();
-        toggleSeries(pendingSeriesId, true);
+        sessionStorage.setItem(`tmcSeriesAccess:${targetId}`, 'true');
+        if (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/')) {
+            window.location.href = `series.html?id=${encodeURIComponent(targetId)}`;
+        } else {
+            toggleSeries(targetId, true);
+        }
         return;
     }
 
@@ -1182,6 +1240,8 @@ async function downloadAudio(url, title, onProgress, signal, options = {}) {
         if (total > 0 && onProgress) {
             const percent = Math.round((loaded / total) * 100);
             onProgress(percent, loaded, total);
+        } else if (onProgress) {
+            onProgress(null, loaded, total);
         }
     }
 
@@ -1237,33 +1297,72 @@ async function cacheRecentAudio(url, title) {
     }
 }
 
+function isValidImageBlob(blob) {
+    return !!(blob && blob.size > 0 && typeof blob.type === 'string' && blob.type.startsWith('image/'));
+}
+
+async function removeMediaAsset(url) {
+    if (!url) return;
+    try {
+        const db = await openDownloadsDb();
+        await new Promise((resolve, reject) => {
+            const tx = db.transaction(MEDIA_ASSETS_STORE, 'readwrite');
+            tx.objectStore(MEDIA_ASSETS_STORE).delete(url);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    } catch (error) {
+        console.warn('Failed to remove media asset:', url, error);
+    }
+}
+
 async function cacheThumbnail(url) {
     if (!url) return null;
     const existing = await getMediaAsset(url);
-    if (existing) return existing;
-    const response = await fetch(url, { mode: 'cors' });
-    if (!response.ok) throw new Error('Thumbnail request failed: ' + response.status);
-    const entry = { url, blob: await response.blob(), cachedAt: Date.now(), kind: 'thumbnail' };
-    await saveMediaAsset(entry);
-    updateOfflineStorageUI();
-    return entry;
+    if (existing) {
+        if (isValidImageBlob(existing.blob)) return existing;
+        await removeMediaAsset(url);
+    }
+    try {
+        const response = await fetch(url, { mode: 'cors' });
+        if (!response.ok) throw new Error('Thumbnail request failed: ' + response.status);
+        const blob = await response.blob();
+        if (!isValidImageBlob(blob)) {
+            console.warn('[Thumbnail] Invalid blob for:', url, blob && { size: blob.size, type: blob.type });
+            return null;
+        }
+        const entry = { url, blob, cachedAt: Date.now(), kind: 'thumbnail' };
+        await saveMediaAsset(entry);
+        updateOfflineStorageUI();
+        return entry;
+    } catch (error) {
+        console.warn('[Thumbnail] Cache failed for:', url, error);
+        return null;
+    }
 }
 
 async function applyCachedThumbnail(element, url) {
     if (!element || !url) return;
     try {
         const entry = await cacheThumbnail(url);
-        if (!entry?.blob) return;
+        if (!entry || !isValidImageBlob(entry.blob)) return;
+        const hasWorkingImage = element.style.backgroundImage && element.style.backgroundImage !== 'none';
+        if (hasWorkingImage) return;
         const objectUrl = URL.createObjectURL(entry.blob);
         element.style.backgroundImage = `url("${objectUrl}")`;
     } catch (error) {
         const cached = await getMediaAsset(url).catch(() => null);
-        if (cached?.blob) {
+        if (cached && isValidImageBlob(cached.blob)) {
+            const hasWorkingImage = element.style.backgroundImage && element.style.backgroundImage !== 'none';
+            if (hasWorkingImage) return;
             const objectUrl = URL.createObjectURL(cached.blob);
             element.style.backgroundImage = `url("${objectUrl}")`;
+        } else if (cached) {
+            await removeMediaAsset(url);
         }
     }
 }
+window.applyCachedThumbnail = applyCachedThumbnail;
 
 async function isDownloaded(url) {
     const db = await openDownloadsDb();
@@ -1278,22 +1377,47 @@ async function isDownloaded(url) {
 function updateDownloadButtonsState() {
     document.querySelectorAll('[data-download-url]').forEach(btn => {
         const url = btn.getAttribute('data-download-url');
+        if (!url) return;
         isDownloaded(url).then(downloaded => {
             if (downloaded) {
-                btn.textContent = 'Downloaded';
-                btn.disabled = true;
                 btn.classList.add('is-downloaded');
+                btn.classList.remove('is-cancelled');
+                btn.disabled = true;
+                btn.dataset.downloadState = 'downloaded';
+                if (btn.querySelector('.download-icon')) {
+                    const label = btn.querySelector('.download-progress-label');
+                    if (label) label.textContent = '';
+                    const fill = btn.querySelector('.download-progress-fill');
+                    if (fill) fill.style.width = '100%';
+                    const cancel = btn.querySelector('.download-cancel-btn');
+                    if (cancel) cancel.remove();
+                    btn.setAttribute('aria-label', 'Downloaded');
+                } else {
+                    btn.textContent = 'Downloaded';
+                }
             } else {
-                btn.textContent = 'Download';
-                btn.disabled = false;
                 btn.classList.remove('is-downloaded');
+                btn.disabled = false;
+                btn.dataset.downloadState = '';
+                if (btn.querySelector('.download-icon')) {
+                    const label = btn.querySelector('.download-progress-label');
+                    if (label) label.textContent = '';
+                    const fill = btn.querySelector('.download-progress-fill');
+                    if (fill) fill.style.width = '0%';
+                    const cancel = btn.querySelector('.download-cancel-btn');
+                    if (cancel) cancel.remove();
+                    btn.setAttribute('aria-label', 'Download');
+                } else {
+                    btn.textContent = 'Download';
+                }
             }
         }).catch(() => {
-            btn.textContent = 'Download';
+            if (!btn.querySelector('.download-icon')) btn.textContent = 'Download';
             btn.disabled = false;
         });
     });
 }
+window.updateDownloadButtonsState = updateDownloadButtonsState;
 
 // ============================================
 // Downloads Page
@@ -1420,6 +1544,9 @@ function initDownloadsPage() {
 
 // Listen button click handler with download support
 document.addEventListener('click', async (e) => {
+    const cancelBtnClick = e.target.closest && e.target.closest('.download-cancel-btn');
+    if (cancelBtnClick) return;
+
     const btn = e.target.closest && (e.target.closest('.listen-btn') || e.target.closest('.download-btn'));
     if (!btn) return;
 
@@ -1430,26 +1557,59 @@ document.addEventListener('click', async (e) => {
         const title = btn.getAttribute('data-download-title') || 'Untitled';
         if (!url) return;
 
+        const hasIcon = !!btn.querySelector('.download-icon');
+        const prevHtml = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<span class="download-progress-label">0%</span><span class="download-progress-track"><span class="download-progress-fill" style="width:0%"></span></span><button type="button" class="download-cancel-btn" aria-label="Cancel download">Cancel</button>';
+        btn.dataset.downloadState = 'downloading';
+        btn.classList.remove('is-cancelled');
+        if (hasIcon) {
+            let label = btn.querySelector('.download-progress-label');
+            if (!label) {
+                label = document.createElement('span');
+                label.className = 'download-progress-label';
+                btn.appendChild(label);
+            }
+            label.textContent = '0%';
+            let cancel = btn.querySelector('.download-cancel-btn');
+            if (!cancel) {
+                cancel = document.createElement('button');
+                cancel.type = 'button';
+                cancel.className = 'download-cancel-btn';
+                cancel.setAttribute('aria-label', 'Cancel download');
+                cancel.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+                btn.appendChild(cancel);
+            }
+            btn.classList.add('is-downloading');
+        } else {
+            btn.innerHTML = '<span class="download-progress-label">0%</span><span class="download-progress-track"><span class="download-progress-fill" style="width:0%"></span></span><button type="button" class="download-cancel-btn" aria-label="Cancel download">Cancel</button>';
+        }
         const cancelBtn = btn.querySelector('.download-cancel-btn');
         const controller = new AbortController();
         const signal = controller.signal;
         let cancelled = false;
 
-        const cancelDownload = () => {
+        const cancelDownload = (ev) => {
+            if (ev) ev.stopPropagation();
             cancelled = true;
             controller.abort();
-            btn.innerHTML = '<span class="download-progress-label">Cancelled</span>';
+            btn.classList.remove('is-downloading');
             btn.classList.add('is-cancelled');
-            btn.disabled = false;
+            btn.dataset.downloadState = '';
+            if (hasIcon) {
+                const label = btn.querySelector('.download-progress-label');
+                if (label) label.textContent = '';
+                const cancelEl = btn.querySelector('.download-cancel-btn');
+                if (cancelEl) cancelEl.remove();
+                btn.disabled = false;
+                btn.setAttribute('aria-label', 'Download');
+            } else {
+                btn.innerHTML = '<span class="download-progress-label">Cancelled</span>';
+                btn.disabled = false;
+            }
         };
 
         if (cancelBtn) {
-            cancelBtn.addEventListener('click', (ev) => {
-                ev.stopPropagation();
-                cancelDownload();
-            });
+            cancelBtn.addEventListener('click', cancelDownload, { once: true });
         }
 
         try {
@@ -1457,19 +1617,45 @@ document.addEventListener('click', async (e) => {
                 if (cancelled) return;
                 const label = btn.querySelector('.download-progress-label');
                 const fill = btn.querySelector('.download-progress-fill');
-                if (label) label.textContent = percent + '%';
-                if (fill) fill.style.width = percent + '%';
+                if (label) {
+                    label.textContent = (percent == null) ? '…' : (percent + '%');
+                }
+                if (fill && percent != null) fill.style.width = percent + '%';
             }, signal);
             if (cancelled) return;
-            btn.textContent = 'Downloaded';
+            btn.classList.remove('is-downloading', 'is-cancelled');
             btn.classList.add('is-downloaded');
+            btn.dataset.downloadState = 'downloaded';
             btn.disabled = true;
+            if (hasIcon) {
+                const label = btn.querySelector('.download-progress-label');
+                if (label) label.textContent = '';
+                const fill = btn.querySelector('.download-progress-fill');
+                if (fill) fill.style.width = '100%';
+                const cancelEl = btn.querySelector('.download-cancel-btn');
+                if (cancelEl) cancelEl.remove();
+                btn.setAttribute('aria-label', 'Downloaded');
+            } else {
+                btn.textContent = 'Downloaded';
+            }
             updateOfflineStorageUI();
+            updateDownloadButtonsState();
         } catch (err) {
             if (cancelled) return;
             console.error('Download failed:', err);
-            btn.textContent = 'Retry Download';
-            btn.disabled = false;
+            btn.classList.remove('is-downloading');
+            btn.dataset.downloadState = '';
+            if (hasIcon) {
+                const label = btn.querySelector('.download-progress-label');
+                if (label) label.textContent = '';
+                const cancelEl = btn.querySelector('.download-cancel-btn');
+                if (cancelEl) cancelEl.remove();
+                btn.disabled = false;
+                btn.setAttribute('aria-label', 'Download');
+            } else {
+                btn.textContent = 'Retry Download';
+                btn.disabled = false;
+            }
             alert('Download failed. Please try again.');
         }
         return;
@@ -1673,6 +1859,7 @@ function playInPageAudio(source, title, resumeTime = 0) {
         });
     });
 }
+window.playInPageAudio = playInPageAudio;
 
 if (pageAudio) {
     pageAudio.addEventListener('playing', () => {
@@ -1686,6 +1873,7 @@ if (pageAudio) {
     pageAudio.addEventListener('ended', () => {
         if (audioPlayerStatus) audioPlayerStatus.textContent = 'Finished.';
         clearContinueListening(activeAudioSource);
+        window.dispatchEvent(new CustomEvent('tmc-audio-ended'));
     });
     pageAudio.addEventListener('error', () => {
         if (audioPlayerStatus) audioPlayerStatus.textContent = 'Playback failed.';
@@ -2215,15 +2403,22 @@ async function fetchSermonsFromSupabase() {
             }
         });
 
-        const payload = await resp.json();
+        let payload = await resp.json();
         console.log('[Supabase] Response status:', resp.status, resp.statusText);
         console.log('[Supabase] Payload:', payload);
 
         if (!resp.ok) {
             console.error('[Supabase] Request failed:', payload);
             showDatabaseError(payload);
-            if (messagesLoadingState) messagesLoadingState.hidden = true;
             return;
+        }
+
+        if (Array.isArray(payload)) {
+            payload = [...payload].sort((a, b) => {
+                const da = a && a.created_at ? new Date(a.created_at).getTime() : 0;
+                const db = b && b.created_at ? new Date(b.created_at).getTime() : 0;
+                return db - da;
+            });
         }
 
         renderFetchedSermons(payload || []);
@@ -2317,114 +2512,79 @@ function renderFetchedSermons(items) {
             });
         }
 
+        const isRestricted = !!(typeof protectedSeriesAccess !== 'undefined' && protectedSeriesAccess[seriesId]);
+
         const card = document.createElement('div');
-        card.className = 'media-card series-card db-fetched-card';
+        card.className = 'media-card series-card db-fetched-card' + (isRestricted ? ' is-restricted' : '');
         card.id = `message-card-${seriesId.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
         card.setAttribute('data-category', 'all');
+        if (series && series.created_at) card.dataset.createdAt = String(series.created_at);
 
-        if (imageUrl) {
-            const mediaImage = document.createElement('div');
-            mediaImage.className = 'media-image';
-            mediaImage.style.background = `#f6faf2 url('${imageUrl}') center center / contain no-repeat`;
-            mediaImage.dataset.thumbnailUrl = imageUrl;
-            applyCachedThumbnail(mediaImage, imageUrl);
-            card.appendChild(mediaImage);
+        const rowLink = document.createElement('a');
+        rowLink.className = 'series-row';
+        rowLink.href = `series.html?id=${encodeURIComponent(seriesId)}`;
+        if (isRestricted) {
+            rowLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                openSeriesAccessModal(seriesId);
+            });
         }
+
+        const mediaImage = document.createElement('div');
+        mediaImage.className = 'media-image';
+        if (imageUrl) {
+            const safeUrl = imageUrl.replace(/"/g, '%22').replace(/\s/g, '%20');
+            mediaImage.style.backgroundImage = `url("${safeUrl}")`;
+            mediaImage.style.backgroundSize = 'cover';
+            mediaImage.style.backgroundPosition = 'center';
+        } else {
+            console.warn('[Supabase] missing cover_image_url for series:', series);
+            mediaImage.classList.add('media-image--placeholder');
+        }
+        rowLink.appendChild(mediaImage);
+
+        const rowContent = document.createElement('div');
+        rowContent.className = 'row-content';
 
         const titleEl = document.createElement('h3');
+        titleEl.className = 'row-title';
         titleEl.textContent = titleText;
-        card.appendChild(titleEl);
+        rowContent.appendChild(titleEl);
 
-        if (descriptionText) {
-            const descEl = document.createElement('p');
-            descEl.textContent = descriptionText;
-            card.appendChild(descEl);
-        }
-
-        const actions = document.createElement('div');
-        actions.className = 'card-actions';
-
-        const toggleBtn = document.createElement('button');
-        toggleBtn.type = 'button';
-        toggleBtn.className = 'btn btn-primary';
-        toggleBtn.setAttribute('data-series-toggle', seriesId);
-        toggleBtn.textContent = volumes.length ? 'Open Series' : 'No Volumes';
-        if (!volumes.length) toggleBtn.disabled = true;
-        actions.appendChild(toggleBtn);
-
-        card.appendChild(actions);
-
-        const volumeListId = seriesId + '-volumes';
-        const volumeList = document.createElement('div');
-        volumeList.className = 'volume-list';
-        volumeList.id = volumeListId;
-        volumeList.hidden = true;
-
-        if (volumes.length > 0) {
-            const ul = document.createElement('ul');
-            volumes.forEach((vol) => {
-                const li = document.createElement('li');
-
-                const main = document.createElement('div');
-                main.className = 'volume-main';
-
-                const numBadge = document.createElement('span');
-                numBadge.className = 'volume-num';
-                const volNum = (vol.volume_number !== undefined && vol.volume_number !== null) ? String(vol.volume_number) : '-';
-                numBadge.textContent = volNum;
-                main.appendChild(numBadge);
-
-                const titleSpan = document.createElement('span');
-                titleSpan.className = 'volume-title';
-                const volTitle = (vol.title || '').trim();
-                titleSpan.textContent = volTitle ? volTitle : 'Untitled';
-                main.appendChild(titleSpan);
-
-                const durationSpan = document.createElement('span');
-                durationSpan.className = 'volume-duration';
-                durationSpan.textContent = (vol.duration || '').trim();
-                main.appendChild(durationSpan);
-
-                li.appendChild(main);
-
-                const actions = document.createElement('div');
-                actions.className = 'volume-actions';
-
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'btn listen-btn';
-                const audioUrl = (vol.audio_url) ? String(vol.audio_url) : '';
-                if (audioUrl) {
-                    btn.setAttribute('data-audio-src', audioUrl);
-                    btn.setAttribute('data-audio-title', volTitle || titleText || 'Untitled message');
-                    btn.textContent = 'Listen';
-                } else {
-                    btn.textContent = 'No audio';
-                    btn.disabled = true;
-                }
-                actions.appendChild(btn);
-
-                const downloadBtn = document.createElement('button');
-                downloadBtn.type = 'button';
-                downloadBtn.className = 'btn download-btn';
-                downloadBtn.setAttribute('data-download-url', audioUrl);
-                downloadBtn.setAttribute('data-download-title', titleText + ' - ' + (volTitle || 'Volume ' + volNum));
-                downloadBtn.setAttribute('data-download-action', 'true');
-                downloadBtn.textContent = 'Download';
-                actions.appendChild(downloadBtn);
-
-                li.appendChild(actions);
-                ul.appendChild(li);
-            });
-            volumeList.appendChild(ul);
+        const metaEl = document.createElement('p');
+        metaEl.className = 'row-meta';
+        if (series && series.created_at) {
+            const d = new Date(series.created_at);
+            if (!isNaN(d.getTime())) {
+                const formatted = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                metaEl.textContent = `Published ${formatted}`;
+            } else {
+                metaEl.textContent = `${volumes.length} ${volumes.length === 1 ? 'volume' : 'volumes'}`;
+            }
         } else {
-            const emptyDiv = document.createElement('div');
-            emptyDiv.className = 'volume-empty';
-            emptyDiv.textContent = 'No volumes uploaded yet.';
-            volumeList.appendChild(emptyDiv);
+            metaEl.textContent = `${volumes.length} ${volumes.length === 1 ? 'volume' : 'volumes'}`;
         }
+        rowContent.appendChild(metaEl);
 
-        card.appendChild(volumeList);
+        rowLink.appendChild(rowContent);
+
+        const rowEnd = document.createElement('div');
+        rowEnd.className = 'row-end';
+        if (isRestricted) {
+            const lock = document.createElement('span');
+            lock.className = 'row-lock';
+            lock.setAttribute('aria-label', 'Restricted');
+            lock.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V7a4 4 0 1 1 8 0v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+            rowEnd.appendChild(lock);
+        }
+        const chevron = document.createElement('span');
+        chevron.className = 'row-chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+        chevron.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        rowEnd.appendChild(chevron);
+        rowLink.appendChild(rowEnd);
+
+        card.appendChild(rowLink);
         fragment.appendChild(card);
     });
 
@@ -2434,11 +2594,6 @@ function renderFetchedSermons(items) {
     // Apply the current search to cards loaded after the initial page setup.
     if (typeof applyMessageFilters === 'function') applyMessageFilters();
     updateMessageSuggestions();
-
-    document.querySelectorAll('[data-series-toggle]').forEach(button => {
-        button.addEventListener('click', () => toggleSeries(button.dataset.seriesToggle));
-    });
-
     updateDownloadButtonsState();
 }
 
@@ -2454,3 +2609,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateDownloadButtonsState();
 });
+
+// ============================================
+// Navbar scroll behavior & sticky offset (Round 2)
+// ============================================
+(function () {
+    const navbar = document.querySelector('.navbar');
+    const searchSection = document.querySelector('.search-section');
+    if (!navbar) return;
+
+    function updateNavState() {
+        const scrolled = window.scrollY > 8;
+        navbar.classList.toggle('is-scrolled', scrolled);
+
+        const navHeight = navbar.offsetHeight;
+        document.documentElement.style.setProperty('--nav-height', navHeight + 'px');
+        if (searchSection) {
+            searchSection.style.top = navHeight + 'px';
+        }
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateNavState();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateNavState);
+    document.addEventListener('DOMContentLoaded', updateNavState);
+    updateNavState();
+})();
