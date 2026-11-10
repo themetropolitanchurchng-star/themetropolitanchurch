@@ -2465,10 +2465,16 @@ function showDatabaseError(err) {
  * @typedef {Object} Series
  * @property {string} [id]
  * @property {string} [title]
- * @property {string} [cover_image_url]
+ * @property {string} [image_url]
  * @property {string} [description]
  * @property {Volume[]} [series_volumes]
  */
+
+function getValidImageUrl(value) {
+    const trimmed = typeof value === 'string' ? value.trim() : '';
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+    return '';
+}
 
 /**
  * @param {Series[]} items
@@ -2500,7 +2506,7 @@ function renderFetchedSermons(items) {
         const seriesId = (series && series.id) ? String(series.id) : ('series-' + Math.random().toString(36).slice(2, 9));
         const titleText = (series && series.title) ? String(series.title) : 'Untitled Series';
         const descriptionText = (series && series.description) ? String(series.description) : '';
-        const imageUrl = (series && series.cover_image_url) ? String(series.cover_image_url) : '';
+        const imageUrl = getValidImageUrl(series && series.image_url);
 
         let volumes = [];
         if (Array.isArray(series.series_volumes)) {
@@ -2537,7 +2543,7 @@ function renderFetchedSermons(items) {
             mediaImage.style.backgroundSize = 'cover';
             mediaImage.style.backgroundPosition = 'center';
         } else {
-            console.warn('[Supabase] missing cover_image_url for series:', series);
+            console.warn('[Supabase] missing image_url for series:', series);
             mediaImage.classList.add('media-image--placeholder');
         }
         rowLink.appendChild(mediaImage);

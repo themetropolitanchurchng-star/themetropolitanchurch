@@ -35,6 +35,12 @@
             .replace(/'/g, '&#39;');
     }
 
+    function getValidImageUrl(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+        return '';
+    }
+
     function getTrackTitle(volume, index) {
         const title = volume && volume.title ? String(volume.title).trim() : '';
         return title || `Track ${index + 1}`;
@@ -161,7 +167,7 @@
     function applySeriesData(series) {
         console.log('[Series] cover fields:', series ? Object.keys(series) : []);
         const title = series && series.title ? String(series.title) : 'Untitled Series';
-        const imageUrl = series && series.cover_image_url ? String(series.cover_image_url) : '';
+        const imageUrl = getValidImageUrl(series && series.image_url);
         const vols = Array.isArray(series && series.series_volumes) ? series.series_volumes.slice() : [];
         volumes = vols.sort((a, b) => {
             const va = parseInt(a.volume_number, 10);
@@ -188,7 +194,7 @@
                 };
                 preload.src = imageUrl;
             } else {
-                console.warn('[Series] missing cover_image_url for series:', series);
+                console.warn('[Series] missing image_url for series:', series);
                 coverEl.classList.add('series-cover--placeholder');
             }
         }
