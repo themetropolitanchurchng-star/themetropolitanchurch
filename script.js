@@ -1447,7 +1447,56 @@ function renderDownloadsPage() {
             return;
         }
 
-        const fragment = document.createDocumentFragment();
+    const featured = document.getElementById('featuredSeries');
+    if (featured) {
+        featured.querySelectorAll('*').forEach(el => el.remove());
+        const featuredItems = items.filter(s => {
+            const id = s && s.id ? String(s.id) : '';
+            const restricted = !!(typeof protectedSeriesAccess !== 'undefined' && protectedSeriesAccess[id]);
+            return !restricted && getValidImageUrl(s && s.image_url);
+        }).slice(0, 3);
+        if (featuredItems.length === 0) {
+            featured.hidden = true;
+        } else {
+            featured.hidden = false;
+            const scroller = document.createElement('div');
+            scroller.className = 'featured-scroller';
+            featuredItems.forEach((series) => {
+                const sid = String(series.id);
+                const slide = document.createElement('a');
+                slide.className = 'featured-slide';
+                slide.href = `series.html?id=${encodeURIComponent(sid)}`;
+                const url = getValidImageUrl(series.image_url);
+                const safe = url.replace(/"/g, '%22').replace(/\s/g, '%20');
+                slide.style.backgroundImage = `url("${safe}")`;
+                const overlay = document.createElement('div');
+                overlay.className = 'featured-overlay';
+                const t = document.createElement('div');
+                t.className = 'featured-title';
+                t.textContent = series.title || 'Untitled Series';
+                const m = document.createElement('div');
+                m.className = 'featured-meta';
+                if (series.created_at) {
+                    const d = new Date(series.created_at);
+                    if (!isNaN(d.getTime())) m.textContent = 'Published ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                }
+                overlay.appendChild(t); overlay.appendChild(m);
+                slide.appendChild(overlay);
+                scroller.appendChild(slide);
+            });
+            const dots = document.createElement('div');
+            dots.className = 'featured-dots';
+            featuredItems.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.className = 'featured-dot' + (i === 0 ? ' is-active' : '');
+                dots.appendChild(dot);
+            });
+            featured.appendChild(scroller);
+            featured.appendChild(dots);
+        }
+    }
+
+    const fragment = document.createDocumentFragment();
         items.forEach((entry) => {
             const card = document.createElement('div');
             card.className = 'media-card download-card';
@@ -2494,6 +2543,7 @@ function renderFetchedSermons(items) {
         emptyMsg.textContent = 'No series found in the database.';
         emptyMsg.style.marginBottom = '18px';
         mediaGrid.insertBefore(emptyMsg, mediaGrid.firstChild);
+        renderFeaturedSeries(items);
         console.warn('[Supabase] No series returned from database.', items);
         return;
     }
@@ -2664,3 +2714,62 @@ document.addEventListener('DOMContentLoaded', () => {
     seek.addEventListener('change', updateSeekFill);
     document.addEventListener('DOMContentLoaded', updateSeekFill);
 })();
+// ===== Featured banner: 3 most recent series =====
+function renderFeaturedSeries(items) {
+    const section = document.getElementById('messages');
+    const grid = document.getElementById('mediaGrid');
+    if (!section || !grid) return;
+    let wrap = document.getElementById('featuredSeries');
+    if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'featuredSeries';
+        wrap.className = 'featured-series';
+        grid.parentNode.insertBefore(wrap, grid);
+    }
+    wrap.replaceChildren();
+
+    const picks = (items || [])
+        .filter((s) => s && s.id && getValidImageUrl(s.image_url) && !protectedSeriesAccess[String(s.id)])
+        .slice(0, 3);
+    if (!picks.length) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+
+    const track = document.createElement('div');
+    track.className = 'featured-track';
+    const dots = document.createElement('div');
+    dots.className = 'featured-dots';
+
+    picks.forEach((s, i) => {
+        const a = document.createElement('a');
+        a.className = 'featured-slide';
+        a.href = `series.html?id=${encodeURIComponent(String(s.id))}`;
+        const url = getValidImageUrl(s.image_url).replace(/"/g, '%22').replace(/\s/g, '%20');
+        a.style.backgroundImage = `url("${url}")`;
+        const d = s.created_at ? new Date(s.created_at) : null;
+        const date = d && !isNaN(d) ? 'Published ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+        const cap = document.createElement('div');
+        cap.className = 'featured-caption';
+        const t = document.createElement('strong'); t.textContent = s.title || 'Untitled Series';
+        const m = document.createElement('span'); m.textContent = date;
+        cap.append(t, m); a.appendChild(cap); track.appendChild(a);
+        const dot = document.createElement('i'); if (i === 0) dot.className = 'is-active'; dots.appendChild(dot);
+    });
+    wrap.append(track, dots);
+
+    const setActive = () => {
+        const idx = Math.round(track.scrollLeft / (track.clientWidth + 12));
+        [...dots.children].forEach((el, i) => el.classList.toggle('is-active', i === idx));
+    };
+    track.addEventListener('scroll', () => requestAnimationFrame(setActive), { passive: true });
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && picks.length > 1) {
+        let paused = false, current = 0;
+        ['pointerdown', 'mouseenter', 'focusin'].forEach((e) => wrap.addEventListener(e, () => (paused = true)));
+        ['pointerup', 'mouseleave', 'focusout'].forEach((e) => wrap.addEventListener(e, () => (paused = false)));
+        setInterval(() => {
+            if (paused || document.hidden) return;
+            current = (Math.round(track.scrollLeft / (track.clientWidth + 12)) + 1) % picks.length;
+            track.scrollTo({ left: current * (track.clientWidth + 12), behavior: 'smooth' });
+        }, 5000);
+    }
+}
